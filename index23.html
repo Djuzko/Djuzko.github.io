@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+		<script src="server.js"></script>
+
+</head>
+<body>
+
+	<div>
+		<button onclick="vote()" id="button">Голосовать!</button>
+
+  <script>
+    function vote() {
+      button.innerHTML = ' бывает ';
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('GET', 'vote', true);
+
+
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState != 4) return;
+
+        if (xhr.status != 200) {
+          // обработать ошибку
+          alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+          return;
+        }
+
+        // обработать результат
+        button.innerHTML = xhr.responseText;
+      }
+
+      xhr.send(null);
+
+    }
+  </script>
+	</div>
+	
+<div>
+	 <h2>Список</h2>
+<ul class="list-group">
+  <li class="list-group-item active">Cras justo odio</li>
+  <li class="list-group-item">Dapibus ac facilisis in</li>
+  <li class="list-group-item">Morbi leo risus</li>
+  <li class="list-group-item">Porta ac consectetur ac</li>
+  <li class="list-group-item">Vestibulum at eros</li>
+</ul>
+</div>
+		  <div class="row">
+		  	 <h2>.   Сетка</h2>
+			<div class="col-sm-3" style="background-color:green;">первый</div>
+			<div class="col-sm-3" style="background-color:red;">второй</div>
+			<div class="col-sm-3" style="background-color:green;">первый</div>
+			<div class="col-sm-3" style="background-color:red;">второй</div>
+		  </div>
+
+<div class="container">
+		  <h2>Выпадающий список</h2>
+		  <ul class="nav nav-pills">
+			<li class="nav-item dropdown">
+			  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">УПАСТЬ</a>
+			  <div class="dropdown-menu">
+				<a class="dropdown-item" href="#">мазда</a>
+				<a class="dropdown-item" href="#">другая марка</a>
+				<a class="dropdown-item" href="#">и еще</a></div>
+			</li>
+		  </ul>
+		</div>
+
+		<div>
+			<h2>Вкладки</h2>
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#home" data-toggle="tab">. один  .</a></li>
+		<li><a href="#profile" data-toggle="tab">два  .</a></li>
+		<li><a href="#messages" data-toggle="tab">три  .</a></li>
+	</ul>
+		</div>
+		<div id="demo" class="carousel slide" data-ride="carousel">
+<h2>Слайдер</h2>
+		  <ul class="carousel-indicators">
+			<li data-target="#demo" data-slide-to="0"></li>
+			<li data-target="#demo" data-slide-to="1" class="active"></li>
+			<li data-target="#demo" data-slide-to="2"></li>
+		  </ul>
+				  <div class="carousel-inner">
+			<div class="carousel-item active">
+			  <img src="https://gorodomsk.ru/wp-content/uploads/2019/04/%D0%91%D0%B0%D0%BD%D0%BD%D0%B5%D1%80-%D0%93%D0%BB%D0%B0%D0%B2%D0%B2%D0%BD%D0%B0%D1%8F-1900%D1%85800_3.jpg" alt="Супер" width="1800" height="500">
+			</div>
+			<div class="carousel-item">
+			  <img src="https://gorodomsk.ru/wp-content/uploads/2019/04/%D0%91%D0%B0%D0%BD%D0%BD%D0%B5%D1%80-%D0%93%D0%BB%D0%B0%D0%B2%D0%B2%D0%BD%D0%B0%D1%8F-1900%D1%85800.jpg" alt="Так себе" width="1800" height="500">
+			</div>
+			<div class="carousel-item">
+			  <img src="https://topkranyug.ru/wp-content/uploads/resized/1ce0ec00ffd3e90b428952d196608e08/-1900%D1%85800-2.jpg" alt="пусто" width="1800" height="500">
+			</div>
+		  </div>
+		</div>
+		  <h2>Галерея</h2>       
+
+<!-- первая трока -->
+
+ <div class="container mt-4">
+
+    <div class = "row">
+    <div class="col-md-4">
+      <a href="#" data-target="#modalIMG" data-toggle="modal" class="color-gray-darker c6 td-hover-none">
+        <div class="ba-0 ds-1">
+          <img alt="Card image cap" class="card-img-top" src="https://st.depositphotos.com/2000885/1902/i/450/depositphotos_19021343-stock-photo-red-heart.jpg" />
+          <div class="card-body"> 
+          </div>
+        </div>  
+      </a>
+  </div>
+
+    <div class="col-md-4">
+      <a data-target="#modal" data-toggle="modal" href="#" class="color-gray-darker td-hover-none">
+        <div class="ba-0 ds-1">
+          <img alt="Card image cap" class="card-img-top" src="https://klike.net/uploads/posts/2018-07/1531483091_1.jpg">
+          <div class="card-body">
+          </div>
+        </div>  
+      </a>
+    </div>  
+
+     <div class="col-md-4">
+      <a href="#" data-target="#cosmos" data-toggle="modal" class="color-gray-darker c6 td-hover-none">
+        <div class="ba-0 tp-s">
+          <img alt="Card image cap" class="card-img-top" src="https://misea.ru/images/u/pages/155/src/earth-1151659-1920.jpg" />
+          <div class="card-body">
+            
+          </div>
+        </div>  
+      </a>
+    </div>
+
+  </div>
+
+  
+
+  
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://st.depositphotos.com/2000885/1902/i/450/depositphotos_19021343-stock-photo-red-heart.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://st.depositphotos.com/2000885/1902/i/450/depositphotos_19021343-stock-photo-red-heart.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://klike.net/uploads/posts/2018-07/1531483091_1.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://klike.net/uploads/posts/2018-07/1531483091_1.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>  
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="cosmos" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://misea.ru/images/u/pages/155/src/earth-1151659-1920.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://misea.ru/images/u/pages/155/src/earth-1151659-1920.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- вторая строка -->
+
+
+ <div class="container mt-4">
+
+    <div class = "row">
+    <div class="col-md-4">
+      <a href="#" data-target="#odin" data-toggle="modal" class="color-gray-darker c6 td-hover-none">
+        <div class="ba-0 ds-1">
+          <img alt="Card image cap" class="card-img-top" src="https://www.1zoom.ru/big2/79/185750-Sepik.jpg" />
+          <div class="card-body"> 
+          </div>
+        </div>  
+      </a>
+  </div>
+
+    <div class="col-md-4">
+      <a data-target="#dva" data-toggle="modal" href="#" class="color-gray-darker td-hover-none">
+        <div class="ba-0 ds-1">
+          <img alt="Card image cap" class="card-img-top" src="https://kartinki-dlya-srisovki.ru/wp-content/uploads/2018/10/kartinki-dlya-srisovki-glaza-1.jpg">
+          <div class="card-body">
+          </div>
+        </div>  
+      </a>
+    </div>  
+
+     <div class="col-md-4">
+      <a href="#" data-target="#tri" data-toggle="modal" class="color-gray-darker c6 td-hover-none">
+        <div class="ba-0 tp-s">
+          <img alt="Card image cap" class="card-img-top" src="https://cs8.pikabu.ru/post_img/big/2017/08/07/12/1502137604118189937.jpg" />
+          <div class="card-body">
+            
+          </div>
+        </div>  
+      </a>
+    </div>
+
+  </div>
+
+  
+
+  
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="odin" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://www.1zoom.ru/big2/79/185750-Sepik.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://www.1zoom.ru/big2/79/185750-Sepik.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="dva" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://kartinki-dlya-srisovki.ru/wp-content/uploads/2018/10/kartinki-dlya-srisovki-glaza-1.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://kartinki-dlya-srisovki.ru/wp-content/uploads/2018/10/kartinki-dlya-srisovki-glaza-1.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>  
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="tri" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body mb-0 p-0">
+        <img src="https://cs8.pikabu.ru/post_img/big/2017/08/07/12/1502137604118189937.jpg" alt="" style="width:100%">
+      </div>
+      <div class="modal-footer">
+        <div><a href="https://cs8.pikabu.ru/post_img/big/2017/08/07/12/1502137604118189937.jpg" target="_blank"></a></div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
