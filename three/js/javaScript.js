@@ -1,5 +1,5 @@
 
-      let scene, camera, renderer;
+      let scene, camera, renderer, hlight;
 
       function init() {
 
