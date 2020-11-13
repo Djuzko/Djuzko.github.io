@@ -1,4 +1,4 @@
-	import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+
       let scene, camera, renderer;
 
       function init() {
