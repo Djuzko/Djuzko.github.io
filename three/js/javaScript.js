@@ -1,5 +1,5 @@
 
-      let scene, camera, renderer, hlight;
+      let scene, camera, renderer;
 
       function init() {
 
@@ -15,10 +15,10 @@
         //controls = new THREE.OrbitControls(camera);
         //controls.addEventListener('change', renderer);
 
-        hlight = new THREE.AmbientLight (0x404040,100);
-        scene.add(hlight);
+        //hlight = new THREE.AmbientLight (0x404040,100);
+        //scene.add(hlight);
 
-        directionalLight = new THREE.DirectionalLight(0xffffff,100);
+       /* directionalLight = new THREE.DirectionalLight(0xffffff,100);
         directionalLight.position.set(0,1,0);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
@@ -34,6 +34,7 @@
         light4 = new THREE.PointLight(0xc4c4c4,10);
         light4.position.set(-500,300,500);
         scene.add(light4);
+        */
 
         renderer = new THREE.WebGLRenderer({antialias:true});
         renderer.setSize(window.innerWidth,window.innerHeight);
