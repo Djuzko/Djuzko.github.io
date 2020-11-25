@@ -26,15 +26,15 @@ scene.add(fillLight);
 scene.add(backLight);
 
 var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setTexturePath('/examples/3d-obj-loader/assets/');
-mtlLoader.setPath('/examples/3d-obj-loader/assets/');
+mtlLoader.setTexturePath('/img/r2-d2/');
+mtlLoader.setPath('/img/r2-d2/');
 mtlLoader.load('r2-d2.mtl', function (materials) {
 
     materials.preload();
 
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
-    objLoader.setPath('/examples/3d-obj-loader/assets/');
+    objLoader.setPath('/img/r2-d2/');
     objLoader.load('r2-d2.obj', function (object) {
 
         scene.add(object);
