@@ -4,19 +4,14 @@ import { Vector } from './../../math/Vector2';
 
 /**
  * An extensible curve object which contains methods for interpolation
- * class Curve<T extends Vector>
+ * class Curve&lt;T extends Vector&gt;
  */
 export class Curve<T extends Vector> {
 
 	/**
-	 * @default 'Curve'
-	 */
-	type: string;
-
-	/**
 	 * This value determines the amount of divisions when calculating the cumulative segment lengths of a curve via .getLengths.
 	 * To ensure precision when using methods like .getSpacedPoints, it is recommended to increase .arcLengthDivisions if the curve is very large.
-	 * @default 200
+	 * Default is 200.
 	 */
 	arcLengthDivisions: number;
 

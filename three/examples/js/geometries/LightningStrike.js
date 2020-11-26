@@ -1,4 +1,6 @@
 /**
+ * @author yomboprime https://github.com/yomboprime
+ *
  * @fileoverview LightningStrike object for creating lightning strikes and voltaic arcs.
  *
  *

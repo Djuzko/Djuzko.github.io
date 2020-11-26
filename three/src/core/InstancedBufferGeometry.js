@@ -1,11 +1,15 @@
 import { BufferGeometry } from './BufferGeometry.js';
 
+/**
+ * @author benaadams / https://twitter.com/ben_a_adams
+ */
+
 function InstancedBufferGeometry() {
 
 	BufferGeometry.call( this );
 
 	this.type = 'InstancedBufferGeometry';
-	this.instanceCount = Infinity;
+	this.maxInstancedCount = undefined;
 
 }
 
@@ -19,7 +23,7 @@ InstancedBufferGeometry.prototype = Object.assign( Object.create( BufferGeometry
 
 		BufferGeometry.prototype.copy.call( this, source );
 
-		this.instanceCount = source.instanceCount;
+		this.maxInstancedCount = source.maxInstancedCount;
 
 		return this;
 
@@ -33,9 +37,9 @@ InstancedBufferGeometry.prototype = Object.assign( Object.create( BufferGeometry
 
 	toJSON: function () {
 
-		const data = BufferGeometry.prototype.toJSON.call( this );
+		var data = BufferGeometry.prototype.toJSON.call( this );
 
-		data.instanceCount = this.instanceCount;
+		data.maxInstancedCount = this.maxInstancedCount;
 
 		data.isInstancedBufferGeometry = true;
 

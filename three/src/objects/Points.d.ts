@@ -6,20 +6,19 @@ import { BufferGeometry } from '../core/BufferGeometry';
 import { Intersection } from '../core/Raycaster';
 
 /**
- * A class for displaying points. The points are rendered by the WebGLRenderer using gl.POINTS.
+ * A class for displaying particles in the form of variable size points. For example, if using the WebGLRenderer, the particles are displayed using GL_POINTS.
+ *
+ * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/objects/ParticleSystem.js">src/objects/ParticleSystem.js</a>
  */
-export class Points <
-	TGeometry extends Geometry | BufferGeometry = Geometry | BufferGeometry,
-	TMaterial extends Material | Material[] = Material | Material[]
-> extends Object3D {
+export class Points extends Object3D {
 
 	/**
 	 * @param geometry An instance of Geometry or BufferGeometry.
 	 * @param material An instance of Material (optional).
 	 */
 	constructor(
-		geometry?: TGeometry,
-		material?: TMaterial
+		geometry?: Geometry | BufferGeometry,
+		material?: Material | Material[]
 	);
 
 	type: 'Points';
@@ -30,12 +29,12 @@ export class Points <
 	/**
 	 * An instance of Geometry or BufferGeometry, where each vertex designates the position of a particle in the system.
 	 */
-	geometry: TGeometry;
+	geometry: Geometry | BufferGeometry;
 
 	/**
 	 * An instance of Material, defining the object's appearance. Default is a PointsMaterial with randomised colour.
 	 */
-	material: TMaterial;
+	material: Material | Material[];
 
 	raycast( raycaster: Raycaster, intersects: Intersection[] ): void;
 	updateMorphTargets(): void;

@@ -1,4 +1,6 @@
 /**
+ * @author takahiro / https://github.com/takahirox
+ *
  * MMDAnimationHelper handles animation of MMD assets loaded by MMDLoader
  * with MMD special features as IK, Grant, and Physics.
  *

@@ -1,4 +1,6 @@
 /**
+ * @author felixturner / http://airtight.cc/
+ *
  * Mirror Shader
  * Copies half the input to the other half
  *

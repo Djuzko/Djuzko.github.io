@@ -1,4 +1,8 @@
-const LoaderUtils = {
+/**
+ * @author Don McCurdy / https://www.donmccurdy.com
+ */
+
+var LoaderUtils = {
 
 	decodeText: function ( array ) {
 
@@ -11,9 +15,9 @@ const LoaderUtils = {
 		// Avoid the String.fromCharCode.apply(null, array) shortcut, which
 		// throws a "maximum call stack size exceeded" error for large arrays.
 
-		let s = '';
+		var s = '';
 
-		for ( let i = 0, il = array.length; i < il; i ++ ) {
+		for ( var i = 0, il = array.length; i < il; i ++ ) {
 
 			// Implicitly assumes little-endian.
 			s += String.fromCharCode( array[ i ] );
@@ -36,7 +40,7 @@ const LoaderUtils = {
 
 	extractUrlBase: function ( url ) {
 
-		const index = url.lastIndexOf( '/' );
+		var index = url.lastIndexOf( '/' );
 
 		if ( index === - 1 ) return './';
 

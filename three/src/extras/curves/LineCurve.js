@@ -1,14 +1,15 @@
 import { Vector2 } from '../../math/Vector2.js';
 import { Curve } from '../core/Curve.js';
 
-function LineCurve( v1 = new Vector2(), v2 = new Vector2() ) {
+
+function LineCurve( v1, v2 ) {
 
 	Curve.call( this );
 
 	this.type = 'LineCurve';
 
-	this.v1 = v1;
-	this.v2 = v2;
+	this.v1 = v1 || new Vector2();
+	this.v2 = v2 || new Vector2();
 
 }
 
@@ -17,9 +18,9 @@ LineCurve.prototype.constructor = LineCurve;
 
 LineCurve.prototype.isLineCurve = true;
 
-LineCurve.prototype.getPoint = function ( t, optionalTarget = new Vector2() ) {
+LineCurve.prototype.getPoint = function ( t, optionalTarget ) {
 
-	const point = optionalTarget;
+	var point = optionalTarget || new Vector2();
 
 	if ( t === 1 ) {
 
@@ -46,9 +47,9 @@ LineCurve.prototype.getPointAt = function ( u, optionalTarget ) {
 
 LineCurve.prototype.getTangent = function ( t, optionalTarget ) {
 
-	const tangent = optionalTarget || new Vector2();
+	var tangent = optionalTarget || new Vector2();
 
-	tangent.copy( this.v2 ).sub( this.v1 ).normalize();
+	var tangent = tangent.copy( this.v2 ).sub( this.v1 ).normalize();
 
 	return tangent;
 
@@ -67,7 +68,7 @@ LineCurve.prototype.copy = function ( source ) {
 
 LineCurve.prototype.toJSON = function () {
 
-	const data = Curve.prototype.toJSON.call( this );
+	var data = Curve.prototype.toJSON.call( this );
 
 	data.v1 = this.v1.toArray();
 	data.v2 = this.v2.toArray();

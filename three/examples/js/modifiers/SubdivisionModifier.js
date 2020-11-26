@@ -1,4 +1,7 @@
 /**
+ *	@author zz85 / http://twitter.com/blurspline / http://www.lab4games.net/zz85/blog
+ *	@author centerionware / http://www.centerionware.com
+ *
  *	Subdivision Geometry Modifier
  *		using Loop Subdivision Scheme
  *
@@ -20,9 +23,7 @@ THREE.SubdivisionModifier = function ( subdivisions ) {
 // Applies the "modify" pattern
 THREE.SubdivisionModifier.prototype.modify = function ( geometry ) {
 
-	var isBufferGeometry = geometry.isBufferGeometry;
-
-	if ( isBufferGeometry ) {
+	if ( geometry.isBufferGeometry ) {
 
 		geometry = new THREE.Geometry().fromBufferGeometry( geometry );
 
@@ -32,7 +33,7 @@ THREE.SubdivisionModifier.prototype.modify = function ( geometry ) {
 
 	}
 
-	geometry.mergeVertices( 6 );
+	geometry.mergeVertices();
 
 	var repeats = this.subdivisions;
 
@@ -45,15 +46,7 @@ THREE.SubdivisionModifier.prototype.modify = function ( geometry ) {
 	geometry.computeFaceNormals();
 	geometry.computeVertexNormals();
 
-	if ( isBufferGeometry ) {
-
-		return new THREE.BufferGeometry().fromGeometry( geometry );
-
-	} else {
-
-		return geometry;
-
-	}
+	return geometry;
 
 };
 

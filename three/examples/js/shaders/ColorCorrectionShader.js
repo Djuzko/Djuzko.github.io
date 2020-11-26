@@ -1,4 +1,6 @@
 /**
+ * @author alteredq / http://alteredqualia.com/
+ *
  * Color correction
  */
 

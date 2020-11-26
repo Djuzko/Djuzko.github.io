@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 import { ArrayCamera } from '../../cameras/ArrayCamera.js';
 import { EventDispatcher } from '../../core/EventDispatcher.js';
 import { PerspectiveCamera } from '../../cameras/PerspectiveCamera.js';
@@ -8,38 +12,38 @@ import { WebXRController } from './WebXRController.js';
 
 function WebXRManager( renderer, gl ) {
 
-	const scope = this;
+	var scope = this;
 
-	let session = null;
+	var session = null;
 
-	let framebufferScaleFactor = 1.0;
+	var framebufferScaleFactor = 1.0;
 
-	let referenceSpace = null;
-	let referenceSpaceType = 'local-floor';
+	var referenceSpace = null;
+	var referenceSpaceType = 'local-floor';
 
-	let pose = null;
+	var pose = null;
 
-	const controllers = [];
-	const inputSourcesMap = new Map();
+	var controllers = [];
+	var inputSourcesMap = new Map();
 
 	//
 
-	const cameraL = new PerspectiveCamera();
+	var cameraL = new PerspectiveCamera();
 	cameraL.layers.enable( 1 );
 	cameraL.viewport = new Vector4();
 
-	const cameraR = new PerspectiveCamera();
+	var cameraR = new PerspectiveCamera();
 	cameraR.layers.enable( 2 );
 	cameraR.viewport = new Vector4();
 
-	const cameras = [ cameraL, cameraR ];
+	var cameras = [ cameraL, cameraR ];
 
-	const cameraVR = new ArrayCamera();
+	var cameraVR = new ArrayCamera();
 	cameraVR.layers.enable( 1 );
 	cameraVR.layers.enable( 2 );
 
-	let _currentDepthNear = null;
-	let _currentDepthFar = null;
+	var _currentDepthNear = null;
+	var _currentDepthFar = null;
 
 	//
 
@@ -49,7 +53,7 @@ function WebXRManager( renderer, gl ) {
 
 	this.getController = function ( index ) {
 
-		let controller = controllers[ index ];
+		var controller = controllers[ index ];
 
 		if ( controller === undefined ) {
 
@@ -64,7 +68,7 @@ function WebXRManager( renderer, gl ) {
 
 	this.getControllerGrip = function ( index ) {
 
-		let controller = controllers[ index ];
+		var controller = controllers[ index ];
 
 		if ( controller === undefined ) {
 
@@ -77,30 +81,15 @@ function WebXRManager( renderer, gl ) {
 
 	};
 
-	this.getHand = function ( index ) {
-
-		let controller = controllers[ index ];
-
-		if ( controller === undefined ) {
-
-			controller = new WebXRController();
-			controllers[ index ] = controller;
-
-		}
-
-		return controller.getHandSpace();
-
-	};
-
 	//
 
 	function onSessionEvent( event ) {
 
-		const controller = inputSourcesMap.get( event.inputSource );
+		var controller = inputSourcesMap.get( event.inputSource );
 
 		if ( controller ) {
 
-			controller.dispatchEvent( { type: event.type, data: event.inputSource } );
+			controller.dispatchEvent( { type: event.type } );
 
 		}
 
@@ -191,15 +180,9 @@ function WebXRManager( renderer, gl ) {
 			session.addEventListener( 'squeezeend', onSessionEvent );
 			session.addEventListener( 'end', onSessionEnd );
 
-			const attributes = gl.getContextAttributes();
+			var attributes = gl.getContextAttributes();
 
-			if ( attributes.xrCompatible !== true ) {
-
-				gl.makeXRCompatible();
-
-			}
-
-			const layerInit = {
+			var layerInit = {
 				antialias: attributes.antialias,
 				alpha: attributes.alpha,
 				depth: attributes.depth,
@@ -208,7 +191,7 @@ function WebXRManager( renderer, gl ) {
 			};
 
 			// eslint-disable-next-line no-undef
-			const baseLayer = new XRWebGLLayer( session, gl, layerInit );
+			var baseLayer = new XRWebGLLayer( session, gl, layerInit );
 
 			session.updateRenderState( { baseLayer: baseLayer } );
 
@@ -224,11 +207,11 @@ function WebXRManager( renderer, gl ) {
 
 	function updateInputSources( event ) {
 
-		const inputSources = session.inputSources;
+		var inputSources = session.inputSources;
 
 		// Assign inputSources to available controllers
 
-		for ( let i = 0; i < controllers.length; i ++ ) {
+		for ( var i = 0; i < controllers.length; i ++ ) {
 
 			inputSourcesMap.set( inputSources[ i ], controllers[ i ] );
 
@@ -236,10 +219,10 @@ function WebXRManager( renderer, gl ) {
 
 		// Notify disconnected
 
-		for ( let i = 0; i < event.removed.length; i ++ ) {
+		for ( var i = 0; i < event.removed.length; i ++ ) {
 
-			const inputSource = event.removed[ i ];
-			const controller = inputSourcesMap.get( inputSource );
+			var inputSource = event.removed[ i ];
+			var controller = inputSourcesMap.get( inputSource );
 
 			if ( controller ) {
 
@@ -252,10 +235,10 @@ function WebXRManager( renderer, gl ) {
 
 		// Notify connected
 
-		for ( let i = 0; i < event.added.length; i ++ ) {
+		for ( var i = 0; i < event.added.length; i ++ ) {
 
-			const inputSource = event.added[ i ];
-			const controller = inputSourcesMap.get( inputSource );
+			var inputSource = event.added[ i ];
+			var controller = inputSourcesMap.get( inputSource );
 
 			if ( controller ) {
 
@@ -269,10 +252,12 @@ function WebXRManager( renderer, gl ) {
 
 	//
 
-	const cameraLPos = new Vector3();
-	const cameraRPos = new Vector3();
+	var cameraLPos = new Vector3();
+	var cameraRPos = new Vector3();
 
 	/**
+	 * @author jsantell / https://www.jsantell.com/
+	 *
 	 * Assumes 2 cameras that are parallel and share an X-axis, and that
 	 * the cameras' projection and world matrices have already been set.
 	 * And that near and far planes are identical for both cameras.
@@ -283,45 +268,45 @@ function WebXRManager( renderer, gl ) {
 		cameraLPos.setFromMatrixPosition( cameraL.matrixWorld );
 		cameraRPos.setFromMatrixPosition( cameraR.matrixWorld );
 
-		const ipd = cameraLPos.distanceTo( cameraRPos );
+		var ipd = cameraLPos.distanceTo( cameraRPos );
 
-		const projL = cameraL.projectionMatrix.elements;
-		const projR = cameraR.projectionMatrix.elements;
+		var projL = cameraL.projectionMatrix.elements;
+		var projR = cameraR.projectionMatrix.elements;
 
 		// VR systems will have identical far and near planes, and
 		// most likely identical top and bottom frustum extents.
 		// Use the left camera for these values.
-		const near = projL[ 14 ] / ( projL[ 10 ] - 1 );
-		const far = projL[ 14 ] / ( projL[ 10 ] + 1 );
-		const topFov = ( projL[ 9 ] + 1 ) / projL[ 5 ];
-		const bottomFov = ( projL[ 9 ] - 1 ) / projL[ 5 ];
+		var near = projL[ 14 ] / ( projL[ 10 ] - 1 );
+		var far = projL[ 14 ] / ( projL[ 10 ] + 1 );
+		var topFov = ( projL[ 9 ] + 1 ) / projL[ 5 ];
+		var bottomFov = ( projL[ 9 ] - 1 ) / projL[ 5 ];
 
-		const leftFov = ( projL[ 8 ] - 1 ) / projL[ 0 ];
-		const rightFov = ( projR[ 8 ] + 1 ) / projR[ 0 ];
-		const left = near * leftFov;
-		const right = near * rightFov;
+		var leftFov = ( projL[ 8 ] - 1 ) / projL[ 0 ];
+		var rightFov = ( projR[ 8 ] + 1 ) / projR[ 0 ];
+		var left = near * leftFov;
+		var right = near * rightFov;
 
 		// Calculate the new camera's position offset from the
 		// left camera. xOffset should be roughly half `ipd`.
-		const zOffset = ipd / ( - leftFov + rightFov );
-		const xOffset = zOffset * - leftFov;
+		var zOffset = ipd / ( - leftFov + rightFov );
+		var xOffset = zOffset * - leftFov;
 
 		// TODO: Better way to apply this offset?
 		cameraL.matrixWorld.decompose( camera.position, camera.quaternion, camera.scale );
 		camera.translateX( xOffset );
 		camera.translateZ( zOffset );
 		camera.matrixWorld.compose( camera.position, camera.quaternion, camera.scale );
-		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
+		camera.matrixWorldInverse.getInverse( camera.matrixWorld );
 
 		// Find the union of the frustum values of the cameras and scale
 		// the values so that the near plane's position does not change in world space,
 		// although must now be relative to the new union camera.
-		const near2 = near + zOffset;
-		const far2 = far + zOffset;
-		const left2 = left - xOffset;
-		const right2 = right + ( ipd - xOffset );
-		const top2 = topFov * far / far2 * near2;
-		const bottom2 = bottomFov * far / far2 * near2;
+		var near2 = near + zOffset;
+		var far2 = far + zOffset;
+		var left2 = left - xOffset;
+		var right2 = right + ( ipd - xOffset );
+		var top2 = topFov * far / far2 * near2;
+		var bottom2 = bottomFov * far / far2 * near2;
 
 		camera.projectionMatrix.makePerspective( left2, right2, top2, bottom2, near2, far2 );
 
@@ -339,7 +324,7 @@ function WebXRManager( renderer, gl ) {
 
 		}
 
-		camera.matrixWorldInverse.copy( camera.matrixWorld ).invert();
+		camera.matrixWorldInverse.getInverse( camera.matrixWorld );
 
 	}
 
@@ -362,12 +347,12 @@ function WebXRManager( renderer, gl ) {
 
 		}
 
-		const parent = camera.parent;
-		const cameras = cameraVR.cameras;
+		var parent = camera.parent;
+		var cameras = cameraVR.cameras;
 
 		updateCamera( cameraVR, parent );
 
-		for ( let i = 0; i < cameras.length; i ++ ) {
+		for ( var i = 0; i < cameras.length; i ++ ) {
 
 			updateCamera( cameras[ i ], parent );
 
@@ -377,9 +362,9 @@ function WebXRManager( renderer, gl ) {
 
 		camera.matrixWorld.copy( cameraVR.matrixWorld );
 
-		const children = camera.children;
+		var children = camera.children;
 
-		for ( let i = 0, l = children.length; i < l; i ++ ) {
+		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 			children[ i ].updateMatrixWorld( true );
 
@@ -405,7 +390,7 @@ function WebXRManager( renderer, gl ) {
 
 	// Animation Loop
 
-	let onAnimationFrameCallback = null;
+	var onAnimationFrameCallback = null;
 
 	function onAnimationFrame( time, frame ) {
 
@@ -413,12 +398,12 @@ function WebXRManager( renderer, gl ) {
 
 		if ( pose !== null ) {
 
-			const views = pose.views;
-			const baseLayer = session.renderState.baseLayer;
+			var views = pose.views;
+			var baseLayer = session.renderState.baseLayer;
 
 			renderer.setFramebuffer( baseLayer.framebuffer );
 
-			let cameraVRNeedsUpdate = false;
+			var cameraVRNeedsUpdate = false;
 
 			// check if it's necessary to rebuild cameraVR's camera list
 
@@ -429,12 +414,12 @@ function WebXRManager( renderer, gl ) {
 
 			}
 
-			for ( let i = 0; i < views.length; i ++ ) {
+			for ( var i = 0; i < views.length; i ++ ) {
 
-				const view = views[ i ];
-				const viewport = baseLayer.getViewport( view );
+				var view = views[ i ];
+				var viewport = baseLayer.getViewport( view );
 
-				const camera = cameras[ i ];
+				var camera = cameras[ i ];
 				camera.matrix.fromArray( view.transform.matrix );
 				camera.projectionMatrix.fromArray( view.projectionMatrix );
 				camera.viewport.set( viewport.x, viewport.y, viewport.width, viewport.height );
@@ -457,12 +442,12 @@ function WebXRManager( renderer, gl ) {
 
 		//
 
-		const inputSources = session.inputSources;
+		var inputSources = session.inputSources;
 
-		for ( let i = 0; i < controllers.length; i ++ ) {
+		for ( var i = 0; i < controllers.length; i ++ ) {
 
-			const controller = controllers[ i ];
-			const inputSource = inputSources[ i ];
+			var controller = controllers[ i ];
+			var inputSource = inputSources[ i ];
 
 			controller.update( inputSource, frame, referenceSpace );
 
@@ -472,7 +457,7 @@ function WebXRManager( renderer, gl ) {
 
 	}
 
-	const animation = new WebGLAnimation();
+	var animation = new WebGLAnimation();
 	animation.setAnimationLoop( onAnimationFrame );
 
 	this.setAnimationLoop = function ( callback ) {

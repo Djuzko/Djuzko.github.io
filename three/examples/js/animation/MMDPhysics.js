@@ -1,4 +1,6 @@
 /**
+ * @author takahiro / https://github.com/takahirox
+ *
  * Dependencies
  *  - Ammo.js https://github.com/kripken/ammo.js
  *
@@ -1310,7 +1312,7 @@ THREE.MMDPhysics = ( function () {
 						.copy( mesh.matrixWorld )
 						.decompose( position, quaternion, scale )
 						.compose( position, quaternion, scale.set( 1, 1, 1 ) )
-						.invert();
+						.getInverse( matrixWorldInv );
 
 					for ( var i = 0, il = bodies.length; i < il; i ++ ) {
 

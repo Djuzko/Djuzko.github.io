@@ -1,4 +1,6 @@
 /**
+ * @author Eric Haines / http://erichaines.com/
+ *
  * Tessellates the famous Utah teapot database by Martin Newell into triangles.
  *
  * Parameters: size = 50, segments = 10, bottom = true, lid = true, body = true,

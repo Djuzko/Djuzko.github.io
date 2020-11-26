@@ -2,6 +2,8 @@
  *
  * Temporal Anti-Aliasing Render Pass
  *
+ * @author bhouston / http://clara.io/
+ *
  * When there is no motion in the scene, the TAA render pass accumulates jittered camera samples across frames to create a high quality anti-aliased result.
  *
  * References:

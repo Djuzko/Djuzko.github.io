@@ -7,23 +7,31 @@ import { Layers } from './Layers.js';
 import { Matrix3 } from '../math/Matrix3.js';
 import { MathUtils } from '../math/MathUtils.js';
 
-let _object3DId = 0;
+var _object3DId = 0;
 
-const _v1 = new Vector3();
-const _q1 = new Quaternion();
-const _m1 = new Matrix4();
-const _target = new Vector3();
+var _v1 = new Vector3();
+var _q1 = new Quaternion();
+var _m1 = new Matrix4();
+var _target = new Vector3();
 
-const _position = new Vector3();
-const _scale = new Vector3();
-const _quaternion = new Quaternion();
+var _position = new Vector3();
+var _scale = new Vector3();
+var _quaternion = new Quaternion();
 
-const _xAxis = new Vector3( 1, 0, 0 );
-const _yAxis = new Vector3( 0, 1, 0 );
-const _zAxis = new Vector3( 0, 0, 1 );
+var _xAxis = new Vector3( 1, 0, 0 );
+var _yAxis = new Vector3( 0, 1, 0 );
+var _zAxis = new Vector3( 0, 0, 1 );
 
-const _addedEvent = { type: 'added' };
-const _removedEvent = { type: 'removed' };
+var _addedEvent = { type: 'added' };
+var _removedEvent = { type: 'removed' };
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * @author mikael emtinger / http://gomo.se/
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author elephantatwork / www.elephantatwork.ch
+ */
 
 function Object3D() {
 
@@ -39,10 +47,10 @@ function Object3D() {
 
 	this.up = Object3D.DefaultUp.clone();
 
-	const position = new Vector3();
-	const rotation = new Euler();
-	const quaternion = new Quaternion();
-	const scale = new Vector3( 1, 1, 1 );
+	var position = new Vector3();
+	var rotation = new Euler();
+	var quaternion = new Quaternion();
+	var scale = new Vector3( 1, 1, 1 );
 
 	function onRotationChange() {
 
@@ -102,8 +110,6 @@ function Object3D() {
 
 	this.frustumCulled = true;
 	this.renderOrder = 0;
-
-	this.animations = [];
 
 	this.userData = {};
 
@@ -253,7 +259,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	worldToLocal: function ( vector ) {
 
-		return vector.applyMatrix4( _m1.copy( this.matrixWorld ).invert() );
+		return vector.applyMatrix4( _m1.getInverse( this.matrixWorld ) );
 
 	},
 
@@ -271,7 +277,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		const parent = this.parent;
+		var parent = this.parent;
 
 		this.updateWorldMatrix( true, false );
 
@@ -293,7 +299,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 			_m1.extractRotation( parent.matrixWorld );
 			_q1.setFromRotationMatrix( _m1 );
-			this.quaternion.premultiply( _q1.invert() );
+			this.quaternion.premultiply( _q1.inverse() );
 
 		}
 
@@ -303,7 +309,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( arguments.length > 1 ) {
 
-			for ( let i = 0; i < arguments.length; i ++ ) {
+			for ( var i = 0; i < arguments.length; i ++ ) {
 
 				this.add( arguments[ i ] );
 
@@ -347,7 +353,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( arguments.length > 1 ) {
 
-			for ( let i = 0; i < arguments.length; i ++ ) {
+			for ( var i = 0; i < arguments.length; i ++ ) {
 
 				this.remove( arguments[ i ] );
 
@@ -357,7 +363,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		const index = this.children.indexOf( object );
+		var index = this.children.indexOf( object );
 
 		if ( index !== - 1 ) {
 
@@ -372,32 +378,13 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	},
 
-	clear: function () {
-
-		for ( let i = 0; i < this.children.length; i ++ ) {
-
-			const object = this.children[ i ];
-
-			object.parent = null;
-
-			object.dispatchEvent( _removedEvent );
-
-		}
-
-		this.children.length = 0;
-
-		return this;
-
-
-	},
-
 	attach: function ( object ) {
 
 		// adds object as a child of this, while maintaining the object's world transform
 
 		this.updateWorldMatrix( true, false );
 
-		_m1.copy( this.matrixWorld ).invert();
+		_m1.getInverse( this.matrixWorld );
 
 		if ( object.parent !== null ) {
 
@@ -433,10 +420,10 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( this[ name ] === value ) return this;
 
-		for ( let i = 0, l = this.children.length; i < l; i ++ ) {
+		for ( var i = 0, l = this.children.length; i < l; i ++ ) {
 
-			const child = this.children[ i ];
-			const object = child.getObjectByProperty( name, value );
+			var child = this.children[ i ];
+			var object = child.getObjectByProperty( name, value );
 
 			if ( object !== undefined ) {
 
@@ -459,7 +446,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		this.updateWorldMatrix( true, false );
+		this.updateMatrixWorld( true );
 
 		return target.setFromMatrixPosition( this.matrixWorld );
 
@@ -474,7 +461,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		this.updateWorldMatrix( true, false );
+		this.updateMatrixWorld( true );
 
 		this.matrixWorld.decompose( _position, target, _scale );
 
@@ -491,7 +478,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		this.updateWorldMatrix( true, false );
+		this.updateMatrixWorld( true );
 
 		this.matrixWorld.decompose( _position, _quaternion, target );
 
@@ -508,9 +495,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		this.updateWorldMatrix( true, false );
+		this.updateMatrixWorld( true );
 
-		const e = this.matrixWorld.elements;
+		var e = this.matrixWorld.elements;
 
 		return target.set( e[ 8 ], e[ 9 ], e[ 10 ] ).normalize();
 
@@ -522,9 +509,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		callback( this );
 
-		const children = this.children;
+		var children = this.children;
 
-		for ( let i = 0, l = children.length; i < l; i ++ ) {
+		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 			children[ i ].traverse( callback );
 
@@ -538,9 +525,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		callback( this );
 
-		const children = this.children;
+		var children = this.children;
 
-		for ( let i = 0, l = children.length; i < l; i ++ ) {
+		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 			children[ i ].traverseVisible( callback );
 
@@ -550,7 +537,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	traverseAncestors: function ( callback ) {
 
-		const parent = this.parent;
+		var parent = this.parent;
 
 		if ( parent !== null ) {
 
@@ -594,9 +581,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		// update children
 
-		const children = this.children;
+		var children = this.children;
 
-		for ( let i = 0, l = children.length; i < l; i ++ ) {
+		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 			children[ i ].updateMatrixWorld( force );
 
@@ -606,7 +593,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	updateWorldMatrix: function ( updateParents, updateChildren ) {
 
-		const parent = this.parent;
+		var parent = this.parent;
 
 		if ( updateParents === true && parent !== null ) {
 
@@ -630,9 +617,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( updateChildren === true ) {
 
-			const children = this.children;
+			var children = this.children;
 
-			for ( let i = 0, l = children.length; i < l; i ++ ) {
+			for ( var i = 0, l = children.length; i < l; i ++ ) {
 
 				children[ i ].updateWorldMatrix( false, true );
 
@@ -645,9 +632,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 	toJSON: function ( meta ) {
 
 		// meta is a string when called from JSON.stringify
-		const isRootObject = ( meta === undefined || typeof meta === 'string' );
+		var isRootObject = ( meta === undefined || typeof meta === 'string' );
 
-		const output = {};
+		var output = {};
 
 		// meta is a hash used to collect geometries, materials.
 		// not providing it implies that this is the root object
@@ -660,9 +647,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 				materials: {},
 				textures: {},
 				images: {},
-				shapes: {},
-				skeletons: {},
-				animations: {}
+				shapes: {}
 			};
 
 			output.metadata = {
@@ -675,7 +660,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		// standard Object3D serialization
 
-		const object = {};
+		var object = {};
 
 		object.uuid = this.uuid;
 		object.type = this.type;
@@ -721,17 +706,17 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 			object.geometry = serialize( meta.geometries, this.geometry );
 
-			const parameters = this.geometry.parameters;
+			var parameters = this.geometry.parameters;
 
 			if ( parameters !== undefined && parameters.shapes !== undefined ) {
 
-				const shapes = parameters.shapes;
+				var shapes = parameters.shapes;
 
 				if ( Array.isArray( shapes ) ) {
 
-					for ( let i = 0, l = shapes.length; i < l; i ++ ) {
+					for ( var i = 0, l = shapes.length; i < l; i ++ ) {
 
-						const shape = shapes[ i ];
+						var shape = shapes[ i ];
 
 						serialize( meta.shapes, shape );
 
@@ -747,28 +732,13 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		if ( this.isSkinnedMesh ) {
-
-			object.bindMode = this.bindMode;
-			object.bindMatrix = this.bindMatrix.toArray();
-
-			if ( this.skeleton !== undefined ) {
-
-				serialize( meta.skeletons, this.skeleton );
-
-				object.skeleton = this.skeleton.uuid;
-
-			}
-
-		}
-
 		if ( this.material !== undefined ) {
 
 			if ( Array.isArray( this.material ) ) {
 
-				const uuids = [];
+				var uuids = [];
 
-				for ( let i = 0, l = this.material.length; i < l; i ++ ) {
+				for ( var i = 0, l = this.material.length; i < l; i ++ ) {
 
 					uuids.push( serialize( meta.materials, this.material[ i ] ) );
 
@@ -790,7 +760,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 			object.children = [];
 
-			for ( let i = 0; i < this.children.length; i ++ ) {
+			for ( var i = 0; i < this.children.length; i ++ ) {
 
 				object.children.push( this.children[ i ].toJSON( meta ).object );
 
@@ -798,39 +768,19 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		//
-
-		if ( this.animations.length > 0 ) {
-
-			object.animations = [];
-
-			for ( let i = 0; i < this.animations.length; i ++ ) {
-
-				const animation = this.animations[ i ];
-
-				object.animations.push( serialize( meta.animations, animation ) );
-
-			}
-
-		}
-
 		if ( isRootObject ) {
 
-			const geometries = extractFromCache( meta.geometries );
-			const materials = extractFromCache( meta.materials );
-			const textures = extractFromCache( meta.textures );
-			const images = extractFromCache( meta.images );
-			const shapes = extractFromCache( meta.shapes );
-			const skeletons = extractFromCache( meta.skeletons );
-			const animations = extractFromCache( meta.animations );
+			var geometries = extractFromCache( meta.geometries );
+			var materials = extractFromCache( meta.materials );
+			var textures = extractFromCache( meta.textures );
+			var images = extractFromCache( meta.images );
+			var shapes = extractFromCache( meta.shapes );
 
 			if ( geometries.length > 0 ) output.geometries = geometries;
 			if ( materials.length > 0 ) output.materials = materials;
 			if ( textures.length > 0 ) output.textures = textures;
 			if ( images.length > 0 ) output.images = images;
 			if ( shapes.length > 0 ) output.shapes = shapes;
-			if ( skeletons.length > 0 ) output.skeletons = skeletons;
-			if ( animations.length > 0 ) output.animations = animations;
 
 		}
 
@@ -843,10 +793,10 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 		// and return as array
 		function extractFromCache( cache ) {
 
-			const values = [];
-			for ( const key in cache ) {
+			var values = [];
+			for ( var key in cache ) {
 
-				const data = cache[ key ];
+				var data = cache[ key ];
 				delete data.metadata;
 				values.push( data );
 
@@ -864,14 +814,15 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	},
 
-	copy: function ( source, recursive = true ) {
+	copy: function ( source, recursive ) {
+
+		if ( recursive === undefined ) recursive = true;
 
 		this.name = source.name;
 
 		this.up.copy( source.up );
 
 		this.position.copy( source.position );
-		this.rotation.order = source.rotation.order;
 		this.quaternion.copy( source.quaternion );
 		this.scale.copy( source.scale );
 
@@ -894,9 +845,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( recursive === true ) {
 
-			for ( let i = 0; i < source.children.length; i ++ ) {
+			for ( var i = 0; i < source.children.length; i ++ ) {
 
-				const child = source.children[ i ];
+				var child = source.children[ i ];
 				this.add( child.clone() );
 
 			}

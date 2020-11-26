@@ -1,4 +1,6 @@
 /**
+ * @author huwb / http://huwbowles.com/
+ *
  * God-rays (crepuscular rays)
  *
  * Similar implementation to the one used by Crytek for CryEngine 2 [Sousa2008].
@@ -83,7 +85,7 @@ THREE.GodRaysGenerateShader = {
 			value: 1.0
 		},
 		vSunPositionScreenSpace: {
-			value: new THREE.Vector3()
+			value: new THREE.Vector2( 0.5, 0.5 )
 		}
 
 	},
@@ -109,14 +111,14 @@ THREE.GodRaysGenerateShader = {
 
 		"uniform sampler2D tInput;",
 
-		"uniform vec3 vSunPositionScreenSpace;",
+		"uniform vec2 vSunPositionScreenSpace;",
 		"uniform float fStepSize;", // filter step size
 
 		"void main() {",
 
 		// delta from current pixel to "sun" position
 
-		"	vec2 delta = vSunPositionScreenSpace.xy - vUv;",
+		"	vec2 delta = vSunPositionScreenSpace - vUv;",
 		"	float dist = length( delta );",
 
 		// Step vector (uv space)
@@ -155,24 +157,22 @@ THREE.GodRaysGenerateShader = {
 
 		// Unrolling loop manually makes it work in ANGLE
 
-		"	float f = min( 1.0, max( vSunPositionScreenSpace.z / 1000.0, 0.0 ) );", // used to fade out godrays
-
-		"	if ( 0.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 0.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
-		"	if ( 1.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 1.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
-		"	if ( 2.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 2.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
-		"	if ( 3.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 3.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
-		"	if ( 4.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 4.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
-		"	if ( 5.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;",
+		"	if ( 5.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r;",
 		"	uv += stepv;",
 
 		// Should technically be dividing by 'iters', but 'TAPS_PER_PASS' smooths out
@@ -210,6 +210,10 @@ THREE.GodRaysCombineShader = {
 
 		fGodRayIntensity: {
 			value: 0.69
+		},
+
+		vSunPositionScreenSpace: {
+			value: new THREE.Vector2( 0.5, 0.5 )
 		}
 
 	},
@@ -234,6 +238,7 @@ THREE.GodRaysCombineShader = {
 		"uniform sampler2D tColors;",
 		"uniform sampler2D tGodRays;",
 
+		"uniform vec2 vSunPositionScreenSpace;",
 		"uniform float fGodRayIntensity;",
 
 		"void main() {",
@@ -262,7 +267,7 @@ THREE.GodRaysFakeSunShader = {
 	uniforms: {
 
 		vSunPositionScreenSpace: {
-			value: new THREE.Vector3()
+			value: new THREE.Vector2( 0.5, 0.5 )
 		},
 
 		fAspect: {
@@ -296,7 +301,7 @@ THREE.GodRaysFakeSunShader = {
 
 		"varying vec2 vUv;",
 
-		"uniform vec3 vSunPositionScreenSpace;",
+		"uniform vec2 vSunPositionScreenSpace;",
 		"uniform float fAspect;",
 
 		"uniform vec3 sunColor;",
@@ -304,7 +309,7 @@ THREE.GodRaysFakeSunShader = {
 
 		"void main() {",
 
-		"	vec2 diff = vUv - vSunPositionScreenSpace.xy;",
+		"	vec2 diff = vUv - vSunPositionScreenSpace;",
 
 		// Correct for aspect ratio
 
@@ -313,7 +318,7 @@ THREE.GodRaysFakeSunShader = {
 		"	float prop = clamp( length( diff ) / 0.5, 0.0, 1.0 );",
 		"	prop = 0.35 * pow( 1.0 - prop, 3.0 );",
 
-		"	gl_FragColor.xyz = ( vSunPositionScreenSpace.z > 0.0 ) ? mix( sunColor, bgColor, 1.0 - prop ) : bgColor;",
+		"	gl_FragColor.xyz = mix( sunColor, bgColor, 1.0 - prop );",
 		"	gl_FragColor.w = 1.0;",
 
 		"}"

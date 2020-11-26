@@ -1,6 +1,11 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 import { ImageLoader } from './ImageLoader.js';
 import { CubeTexture } from '../textures/CubeTexture.js';
 import { Loader } from './Loader.js';
+
 
 function CubeTextureLoader( manager ) {
 
@@ -14,13 +19,13 @@ CubeTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ), 
 
 	load: function ( urls, onLoad, onProgress, onError ) {
 
-		const texture = new CubeTexture();
+		var texture = new CubeTexture();
 
-		const loader = new ImageLoader( this.manager );
+		var loader = new ImageLoader( this.manager );
 		loader.setCrossOrigin( this.crossOrigin );
 		loader.setPath( this.path );
 
-		let loaded = 0;
+		var loaded = 0;
 
 		function loadTexture( i ) {
 
@@ -42,7 +47,7 @@ CubeTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ), 
 
 		}
 
-		for ( let i = 0; i < urls.length; ++ i ) {
+		for ( var i = 0; i < urls.length; ++ i ) {
 
 			loadTexture( i );
 

@@ -73,7 +73,6 @@ export let UniformsLib: {
 			value: any[];
 			properties: {
 				shadowBias: {};
-				shadowNormalBias: {};
 				shadowRadius: {};
 				shadowMapSize: {};
 			};
@@ -96,7 +95,6 @@ export let UniformsLib: {
 			value: any[];
 			properties: {
 				shadowBias: {};
-				shadowNormalBias: {};
 				shadowRadius: {};
 				shadowMapSize: {};
 			};
@@ -116,7 +114,6 @@ export let UniformsLib: {
 			value: any[];
 			properties: {
 				shadowBias: {};
-				shadowNormalBias: {};
 				shadowRadius: {};
 				shadowMapSize: {};
 			};

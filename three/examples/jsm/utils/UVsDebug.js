@@ -1,14 +1,18 @@
-import {
-	Vector2
-} from "../../../build/three.module.js";
-
 /**
+ * @author zz85 / http://github.com/zz85
+ * @author WestLangley / http://github.com/WestLangley
+ * @author Mugen87 / https://github.com/Mugen87
+ *
  * tool for "unwrapping" and debugging three.js geometries UV mapping
  *
  * Sample usage:
  *	document.body.appendChild( UVsDebug( new THREE.SphereBufferGeometry( 10, 10, 10, 10 ) );
  *
  */
+
+import {
+	Vector2
+} from "../../../build/three.module.js";
 
 var UVsDebug = function ( geometry, size ) {
 
@@ -33,13 +37,13 @@ var UVsDebug = function ( geometry, size ) {
 	canvas.height = height;
 
 	var ctx = canvas.getContext( '2d' );
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'rgb( 63, 63, 63 )';
+	ctx.lineWidth = 2;
+	ctx.strokeStyle = 'rgba( 0, 0, 0, 1.0 )';
 	ctx.textAlign = 'center';
 
 	// paint background white
 
-	ctx.fillStyle = 'rgb( 255, 255, 255 )';
+	ctx.fillStyle = 'rgba( 255, 255, 255, 1.0 )';
 	ctx.fillRect( 0, 0, width, height );
 
 	if ( geometry.isGeometry ) {
@@ -128,11 +132,11 @@ var UVsDebug = function ( geometry, size ) {
 
 			if ( j === 0 ) {
 
-				ctx.moveTo( uv.x * ( width - 2 ) + 0.5, ( 1 - uv.y ) * ( height - 2 ) + 0.5 );
+				ctx.moveTo( uv.x * width, ( 1 - uv.y ) * height );
 
 			} else {
 
-				ctx.lineTo( uv.x * ( width - 2 ) + 0.5, ( 1 - uv.y ) * ( height - 2 ) + 0.5 );
+				ctx.lineTo( uv.x * width, ( 1 - uv.y ) * height );
 
 			}
 
@@ -147,8 +151,8 @@ var UVsDebug = function ( geometry, size ) {
 
 		// label the face number
 
-		ctx.font = '18px Arial';
-		ctx.fillStyle = 'rgb( 63, 63, 63 )';
+		ctx.font = '12pt Arial bold';
+		ctx.fillStyle = 'rgba( 0, 0, 0, 1.0 )';
 		ctx.fillText( index, a.x * width, ( 1 - a.y ) * height );
 
 		if ( a.x > 0.95 ) {
@@ -161,8 +165,8 @@ var UVsDebug = function ( geometry, size ) {
 
 		//
 
-		ctx.font = '12px Arial';
-		ctx.fillStyle = 'rgb( 191, 191, 191 )';
+		ctx.font = '8pt Arial bold';
+		ctx.fillStyle = 'rgba( 0, 0, 0, 1.0 )';
 
 		// label uv edge orders
 

@@ -1,3 +1,7 @@
+/**
+ * @author bhouston / http://clara.io/
+ */
+
 THREE.CubeTexturePass = function ( camera, envMap, opacity ) {
 
 	THREE.Pass.call( this );

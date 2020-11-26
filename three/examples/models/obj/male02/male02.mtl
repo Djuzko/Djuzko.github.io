@@ -1,56 +1,22 @@
-# Material Count: 5
-newmtl _01_-_Default1noCulli__01_-_Default1noCulli
-Ns 154.901961
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.165000 0.165000 0.165000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd 01_-_Default1noCulling.JPG
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 20.05.2020 16:21:58
 
+newmtl wire_177088027
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.6941 0.3451 0.1059
+	Kd 0.6941 0.3451 0.1059
+	Ks 0.3500 0.3500 0.3500
 
-newmtl FrontColorNoCullingID_male-02-1noCulling.JP
-Ns 154.901961
-Ka 0.000000 0.000000 0.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.165000 0.165000 0.165000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd male-02-1noCulling.JPG
-
-
-newmtl male-02-1noCullingID_male-02-1noCulling.JP
-Ns 154.901961
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.165000 0.165000 0.165000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd male-02-1noCulling.JPG
-
-
-newmtl orig_02_-_Defaul1noCu_orig_02_-_Defaul1noCu
-Ns 154.901961
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.165000 0.165000 0.165000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd orig_02_-_Defaul1noCulling.JPG
-
-
-newmtl FrontColorNoCullingID_orig_02_-_Defaul1noCu
-Ns 154.901961
-Ka 0.000000 0.000000 0.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.165000 0.165000 0.165000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd orig_02_-_Defaul1noCulling.JPG
-
-
+newmtl wire_135006006
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.5294 0.0235 0.0235
+	Kd 0.5294 0.0235 0.0235
+	Ks 0.3500 0.3500 0.3500

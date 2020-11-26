@@ -1,4 +1,10 @@
 /**
+ * @author aleeper / http://adamleeper.com/
+ * @author mrdoob / http://mrdoob.com/
+ * @author gero3 / https://github.com/gero3
+ * @author Mugen87 / https://github.com/Mugen87
+ * @author neverhood311 / https://github.com/neverhood311
+ *
  * Description: A THREE loader for STL ASCII files, as created by Solidworks and other CAD programs.
  *
  * Supports both binary and ASCII encoded files, with automatic detection of type.
@@ -64,31 +70,22 @@ THREE.STLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 
 		var scope = this;
 
-		var loader = new THREE.FileLoader( this.manager );
-		loader.setPath( this.path );
+		var loader = new THREE.FileLoader( scope.manager );
+		loader.setPath( scope.path );
 		loader.setResponseType( 'arraybuffer' );
-		loader.setRequestHeader( this.requestHeader );
-		loader.setWithCredentials( this.withCredentials );
-
 		loader.load( url, function ( text ) {
 
 			try {
 
 				onLoad( scope.parse( text ) );
 
-			} catch ( e ) {
+			} catch ( exception ) {
 
 				if ( onError ) {
 
-					onError( e );
-
-				} else {
-
-					console.error( e );
+					onError( exception );
 
 				}
-
-				scope.manager.itemError( url );
 
 			}
 

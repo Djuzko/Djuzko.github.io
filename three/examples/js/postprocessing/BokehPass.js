@@ -21,7 +21,8 @@ THREE.BokehPass = function ( scene, camera, params ) {
 
 	this.renderTargetDepth = new THREE.WebGLRenderTarget( width, height, {
 		minFilter: THREE.NearestFilter,
-		magFilter: THREE.NearestFilter
+		magFilter: THREE.NearestFilter,
+		stencilBuffer: false
 	} );
 
 	this.renderTargetDepth.texture.name = "BokehPass.depth";

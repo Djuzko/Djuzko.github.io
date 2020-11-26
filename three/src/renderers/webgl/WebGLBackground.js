@@ -1,39 +1,37 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 import { BackSide, FrontSide, CubeUVReflectionMapping } from '../../constants.js';
-import { BoxBufferGeometry } from '../../geometries/BoxBufferGeometry.js';
-import { PlaneBufferGeometry } from '../../geometries/PlaneBufferGeometry.js';
+import { BoxBufferGeometry } from '../../geometries/BoxGeometry.js';
+import { PlaneBufferGeometry } from '../../geometries/PlaneGeometry.js';
 import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
 import { Color } from '../../math/Color.js';
 import { Mesh } from '../../objects/Mesh.js';
 import { ShaderLib } from '../shaders/ShaderLib.js';
 import { cloneUniforms } from '../shaders/UniformsUtils.js';
 
-function WebGLBackground( renderer, cubemaps, state, objects, premultipliedAlpha ) {
+function WebGLBackground( renderer, state, objects, premultipliedAlpha ) {
 
-	const clearColor = new Color( 0x000000 );
-	let clearAlpha = 0;
+	var clearColor = new Color( 0x000000 );
+	var clearAlpha = 0;
 
-	let planeMesh;
-	let boxMesh;
+	var planeMesh;
+	var boxMesh;
 
-	let currentBackground = null;
-	let currentBackgroundVersion = 0;
-	let currentTonemapping = null;
+	var currentBackground = null;
+	var currentBackgroundVersion = 0;
+	var currentTonemapping = null;
 
 	function render( renderList, scene, camera, forceClear ) {
 
-		let background = scene.isScene === true ? scene.background : null;
-
-		if ( background && background.isTexture ) {
-
-			background = cubemaps.get( background );
-
-		}
+		var background = scene.background;
 
 		// Ignore background in AR
 		// TODO: Reconsider this.
 
-		const xr = renderer.xr;
-		const session = xr.getSession && xr.getSession();
+		var xr = renderer.xr;
+		var session = xr.getSession && xr.getSession();
 
 		if ( session && session.environmentBlendMode === 'additive' ) {
 
@@ -65,7 +63,7 @@ function WebGLBackground( renderer, cubemaps, state, objects, premultipliedAlpha
 				boxMesh = new Mesh(
 					new BoxBufferGeometry( 1, 1, 1 ),
 					new ShaderMaterial( {
-						name: 'BackgroundCubeMaterial',
+						type: 'BackgroundCubeMaterial',
 						uniforms: cloneUniforms( ShaderLib.cube.uniforms ),
 						vertexShader: ShaderLib.cube.vertexShader,
 						fragmentShader: ShaderLib.cube.fragmentShader,
@@ -100,25 +98,19 @@ function WebGLBackground( renderer, cubemaps, state, objects, premultipliedAlpha
 
 			}
 
-			if ( background.isWebGLCubeRenderTarget ) {
+			var texture = background.isWebGLCubeRenderTarget ? background.texture : background;
 
-				// TODO Deprecate
-
-				background = background.texture;
-
-			}
-
-			boxMesh.material.uniforms.envMap.value = background;
-			boxMesh.material.uniforms.flipEnvMap.value = ( background.isCubeTexture && background._needsFlipEnvMap ) ? - 1 : 1;
+			boxMesh.material.uniforms.envMap.value = texture;
+			boxMesh.material.uniforms.flipEnvMap.value = texture.isCubeTexture ? - 1 : 1;
 
 			if ( currentBackground !== background ||
-				currentBackgroundVersion !== background.version ||
+				currentBackgroundVersion !== texture.version ||
 				currentTonemapping !== renderer.toneMapping ) {
 
 				boxMesh.material.needsUpdate = true;
 
 				currentBackground = background;
-				currentBackgroundVersion = background.version;
+				currentBackgroundVersion = texture.version;
 				currentTonemapping = renderer.toneMapping;
 
 			}
@@ -133,7 +125,7 @@ function WebGLBackground( renderer, cubemaps, state, objects, premultipliedAlpha
 				planeMesh = new Mesh(
 					new PlaneBufferGeometry( 2, 2 ),
 					new ShaderMaterial( {
-						name: 'BackgroundMaterial',
+						type: 'BackgroundMaterial',
 						uniforms: cloneUniforms( ShaderLib.background.uniforms ),
 						vertexShader: ShaderLib.background.vertexShader,
 						fragmentShader: ShaderLib.background.fragmentShader,
@@ -204,10 +196,10 @@ function WebGLBackground( renderer, cubemaps, state, objects, premultipliedAlpha
 			return clearColor;
 
 		},
-		setClearColor: function ( color, alpha = 1 ) {
+		setClearColor: function ( color, alpha ) {
 
 			clearColor.set( color );
-			clearAlpha = alpha;
+			clearAlpha = alpha !== undefined ? alpha : 1;
 			setClear( clearColor, clearAlpha );
 
 		},

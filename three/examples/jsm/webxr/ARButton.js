@@ -1,16 +1,25 @@
-class ARButton {
+/**
+ * @author mrdoob / http://mrdoob.com
+ * @author Mugen87 / https://github.com/Mugen87
+ */
 
-	static createButton( renderer, sessionInit = {} ) {
+var ARButton = {
 
-		const button = document.createElement( 'button' );
+	createButton: function ( renderer, sessionInit = {} ) {
 
 		function showStartAR( /*device*/ ) {
 
-			let currentSession = null;
+			var currentSession = null;
 
 			function onSessionStarted( session ) {
 
 				session.addEventListener( 'end', onSessionEnded );
+
+				/*
+				session.updateWorldTrackingState( {
+					'planeDetectionState': { 'enabled': true }
+				} );
+				*/
 
 				renderer.xr.setReferenceSpaceType( 'local' );
 				renderer.xr.setSession( session );
@@ -110,7 +119,7 @@ class ARButton {
 
 		if ( 'xr' in navigator ) {
 
-			button.id = 'ARButton';
+			var button = document.createElement( 'button' );
 			button.style.display = 'none';
 
 			stylizeElement( button );
@@ -125,7 +134,7 @@ class ARButton {
 
 		} else {
 
-			const message = document.createElement( 'a' );
+			var message = document.createElement( 'a' );
 
 			if ( window.isSecureContext === false ) {
 
@@ -151,6 +160,6 @@ class ARButton {
 
 	}
 
-}
+};
 
 export { ARButton };

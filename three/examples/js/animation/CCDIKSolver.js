@@ -1,4 +1,6 @@
 /**
+ * @author takahiro / https://github.com/takahirox
+ *
  * CCD Algorithm
  *  - https://sites.google.com/site/auraliusproject/ccd-algorithm
  *
@@ -95,7 +97,7 @@ THREE.CCDIKSolver = ( function () {
 							// don't use getWorldPosition/Quaternion() here for the performance
 							// because they call updateMatrixWorld( true ) inside.
 							link.matrixWorld.decompose( linkPos, invLinkQ, linkScale );
-							invLinkQ.invert();
+							invLinkQ.inverse();
 							effectorPos.setFromMatrixPosition( effector.matrixWorld );
 
 							// work in link world
@@ -332,7 +334,7 @@ THREE.CCDIKSolver = ( function () {
 					var iks = this.iks;
 					var bones = mesh.skeleton.bones;
 
-					matrix.copy( mesh.matrixWorld ).invert();
+					matrix.getInverse( mesh.matrixWorld );
 
 					for ( var i = 0, il = iks.length; i < il; i ++ ) {
 

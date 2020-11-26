@@ -1,3 +1,7 @@
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
 THREE.MD2Character = function () {
 
 	var scope = this;

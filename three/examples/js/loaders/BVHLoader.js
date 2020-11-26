@@ -1,4 +1,7 @@
 /**
+ * @author herzig / http://github.com/herzig
+ * @author Mugen87 / https://github.com/Mugen87
+ *
  * Description: reads BVH files and outputs a single THREE.Skeleton and an THREE.AnimationClip
  *
  * Currently only supports bvh files containing a single root.
@@ -24,29 +27,9 @@ THREE.BVHLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 
 		var loader = new THREE.FileLoader( scope.manager );
 		loader.setPath( scope.path );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( text ) {
 
-			try {
-
-				onLoad( scope.parse( text ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( text ) );
 
 		}, onProgress, onError );
 

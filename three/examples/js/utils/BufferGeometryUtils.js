@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 THREE.BufferGeometryUtils = {
 
 	computeTangents: function ( geometry ) {

@@ -1,3 +1,9 @@
+/**
+ * @author Don McCurdy / https://www.donmccurdy.com
+ * @author Austin Eng / https://github.com/austinEng
+ * @author Shrek Shao / https://github.com/shrekshao
+ */
+
 import {
 	CompressedTexture,
 	FileLoader,
@@ -47,8 +53,6 @@ var BasisTextureLoader = function ( manager ) {
 
 };
 
-BasisTextureLoader.taskCache = new WeakMap();
-
 BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	constructor: BasisTextureLoader,
@@ -73,12 +77,12 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 
 		var config = this.workerConfig;
 
-		config.astcSupported = renderer.extensions.has( 'WEBGL_compressed_texture_astc' );
-		config.bptcSupported = renderer.extensions.has( 'EXT_texture_compression_bptc' );
-		config.etcSupported = renderer.extensions.has( 'WEBGL_compressed_texture_etc1' );
-		config.dxtSupported = renderer.extensions.has( 'WEBGL_compressed_texture_s3tc' );
-		config.pvrtcSupported = renderer.extensions.has( 'WEBGL_compressed_texture_pvrtc' )
-			|| renderer.extensions.has( 'WEBKIT_WEBGL_compressed_texture_pvrtc' );
+		config.astcSupported = !! renderer.extensions.get( 'WEBGL_compressed_texture_astc' );
+		config.bptcSupported = !! renderer.extensions.get( 'EXT_texture_compression_bptc' );
+		config.etcSupported = !! renderer.extensions.get( 'WEBGL_compressed_texture_etc1' );
+		config.dxtSupported = !! renderer.extensions.get( 'WEBGL_compressed_texture_s3tc' );
+		config.pvrtcSupported = !! renderer.extensions.get( 'WEBGL_compressed_texture_pvrtc' )
+			|| !! renderer.extensions.get( 'WEBKIT_WEBGL_compressed_texture_pvrtc' );
 
 		if ( config.astcSupported ) {
 
@@ -115,21 +119,10 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 		var loader = new FileLoader( this.manager );
 
 		loader.setResponseType( 'arraybuffer' );
-		loader.setWithCredentials( this.withCredentials );
 
 		loader.load( url, ( buffer ) => {
 
-			// Check for an existing task using this buffer. A transferred buffer cannot be transferred
-			// again from this thread.
-			if ( BasisTextureLoader.taskCache.has( buffer ) ) {
-
-				var cachedTask = BasisTextureLoader.taskCache.get( buffer );
-
-				return cachedTask.promise.then( onLoad ).catch( onError );
-
-			}
-
-			this._createTexture( buffer, url )
+			this._createTexture( buffer )
 				.then( onLoad )
 				.catch( onError );
 
@@ -138,11 +131,10 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 	},
 
 	/**
-	 * @param	{ArrayBuffer} buffer
-	 * @param	{string} url
+	 * @param  {ArrayBuffer} buffer
 	 * @return {Promise<CompressedTexture>}
 	 */
-	_createTexture: function ( buffer, url ) {
+	_createTexture: function ( buffer ) {
 
 		var worker;
 		var taskID;
@@ -207,10 +199,8 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 
 			} );
 
-		// Note: replaced '.finally()' with '.catch().then()' block - iOS 11 support (#19416)
 		texturePending
-			.catch( () => true )
-			.then( () => {
+			.finally( () => {
 
 				if ( worker && taskID ) {
 
@@ -220,14 +210,6 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 				}
 
 			} );
-
-		// Cache the task result.
-		BasisTextureLoader.taskCache.set( buffer, {
-
-			url: url,
-			promise: texturePending
-
-		} );
 
 		return texturePending;
 
@@ -240,7 +222,6 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 			// Load transcoder wrapper.
 			var jsLoader = new FileLoader( this.manager );
 			jsLoader.setPath( this.transcoderPath );
-			jsLoader.setWithCredentials( this.withCredentials );
 			var jsContent = new Promise( ( resolve, reject ) => {
 
 				jsLoader.load( 'basis_transcoder.js', resolve, undefined, reject );
@@ -251,7 +232,6 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 			var binaryLoader = new FileLoader( this.manager );
 			binaryLoader.setPath( this.transcoderPath );
 			binaryLoader.setResponseType( 'arraybuffer' );
-			binaryLoader.setWithCredentials( this.withCredentials );
 			var binaryContent = new Promise( ( resolve, reject ) => {
 
 				binaryLoader.load( 'basis_transcoder.wasm', resolve, undefined, reject );
@@ -450,7 +430,7 @@ BasisTextureLoader.BasisWorker = function () {
 		transcoderPending = new Promise( ( resolve ) => {
 
 			BasisModule = { wasmBinary, onRuntimeInitialized: resolve };
-			BASIS( BasisModule ); // eslint-disable-line no-undef
+			BASIS( BasisModule );
 
 		} ).then( () => {
 
@@ -497,7 +477,7 @@ BasisTextureLoader.BasisWorker = function () {
 		if ( ! width || ! height || ! levels ) {
 
 			cleanup();
-			throw new Error( 'THREE.BasisTextureLoader:	Invalid .basis file' );
+			throw new Error( 'THREE.BasisTextureLoader:  Invalid .basis file' );
 
 		}
 

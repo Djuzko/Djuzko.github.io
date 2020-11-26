@@ -1,3 +1,7 @@
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
 THREE.Gyroscope = function () {
 
 	THREE.Object3D.call( this );

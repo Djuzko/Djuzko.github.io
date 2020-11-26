@@ -1,3 +1,7 @@
+/*
+ *  three.js NRRD file loader
+ */
+
 THREE.NRRDLoader = function ( manager ) {
 
 	THREE.Loader.call( this, manager );
@@ -15,29 +19,9 @@ THREE.NRRDLoader.prototype = Object.assign( Object.create( THREE.Loader.prototyp
 		var loader = new THREE.FileLoader( scope.manager );
 		loader.setPath( scope.path );
 		loader.setResponseType( 'arraybuffer' );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( data ) {
 
-			try {
-
-				onLoad( scope.parse( data ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( data ) );
 
 		}, onProgress, onError );
 
@@ -407,7 +391,7 @@ THREE.NRRDLoader.prototype = Object.assign( Object.create( THREE.Loader.prototyp
 		}
 
 		volume.inverseMatrix = new THREE.Matrix4();
-		volume.inverseMatrix.copy( volume.matrix ).invert();
+		volume.inverseMatrix.getInverse( volume.matrix );
 		volume.RASDimensions = ( new THREE.Vector3( volume.xLength, volume.yLength, volume.zLength ) ).applyMatrix4( volume.matrix ).round().toArray().map( Math.abs );
 
 		// .. and set the default threshold

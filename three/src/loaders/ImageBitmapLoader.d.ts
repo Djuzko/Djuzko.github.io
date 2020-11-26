@@ -5,12 +5,7 @@ export class ImageBitmapLoader extends Loader {
 
 	constructor( manager?: LoadingManager );
 
-	/**
-	 * @default { premultiplyAlpha: 'none' }
-	 */
 	options: undefined | object;
-
-	readonly isImageBitmapLoader: true;
 
 	setOptions( options: object ): ImageBitmapLoader;
 	load(

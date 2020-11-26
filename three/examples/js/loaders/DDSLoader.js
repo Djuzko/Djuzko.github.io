@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 THREE.DDSLoader = function ( manager ) {
 
 	THREE.CompressedTextureLoader.call( this, manager );

@@ -1,4 +1,7 @@
 /**
+ * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com
+ * @author chaht01 / http://hyuntak.com
  * Port of http://webglsamples.org/blob/blob.html
  */
 

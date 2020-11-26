@@ -2,7 +2,12 @@ import { EventDispatcher } from '../core/EventDispatcher.js';
 import { FrontSide, FlatShading, NormalBlending, LessEqualDepth, AddEquation, OneMinusSrcAlphaFactor, SrcAlphaFactor, AlwaysStencilFunc, KeepStencilOp } from '../constants.js';
 import { MathUtils } from '../math/MathUtils.js';
 
-let materialId = 0;
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
+ */
+
+var materialId = 0;
 
 function Material() {
 
@@ -78,21 +83,15 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	isMaterial: true,
 
-	onBeforeCompile: function ( /* shaderobject, renderer */ ) {},
-
-	customProgramCacheKey: function () {
-
-		return this.onBeforeCompile.toString();
-
-	},
+	onBeforeCompile: function () {},
 
 	setValues: function ( values ) {
 
 		if ( values === undefined ) return;
 
-		for ( const key in values ) {
+		for ( var key in values ) {
 
-			const newValue = values[ key ];
+			var newValue = values[ key ];
 
 			if ( newValue === undefined ) {
 
@@ -110,7 +109,7 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 			}
 
-			const currentValue = this[ key ];
+			var currentValue = this[ key ];
 
 			if ( currentValue === undefined ) {
 
@@ -139,7 +138,7 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	toJSON: function ( meta ) {
 
-		const isRoot = ( meta === undefined || typeof meta === 'string' );
+		var isRoot = ( meta === undefined || typeof meta === 'string' );
 
 		if ( isRoot ) {
 
@@ -150,7 +149,7 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		const data = {
+		var data = {
 			metadata: {
 				version: 4.5,
 				type: 'Material',
@@ -315,11 +314,11 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		function extractFromCache( cache ) {
 
-			const values = [];
+			var values = [];
 
-			for ( const key in cache ) {
+			for ( var key in cache ) {
 
-				const data = cache[ key ];
+				var data = cache[ key ];
 				delete data.metadata;
 				values.push( data );
 
@@ -331,8 +330,8 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( isRoot ) {
 
-			const textures = extractFromCache( meta.textures );
-			const images = extractFromCache( meta.images );
+			var textures = extractFromCache( meta.textures );
+			var images = extractFromCache( meta.images );
 
 			if ( textures.length > 0 ) data.textures = textures;
 			if ( images.length > 0 ) data.images = images;
@@ -383,19 +382,16 @@ Material.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 		this.stencilZPass = source.stencilZPass;
 		this.stencilWrite = source.stencilWrite;
 
-		const srcPlanes = source.clippingPlanes;
-		let dstPlanes = null;
+		var srcPlanes = source.clippingPlanes,
+			dstPlanes = null;
 
 		if ( srcPlanes !== null ) {
 
-			const n = srcPlanes.length;
+			var n = srcPlanes.length;
 			dstPlanes = new Array( n );
 
-			for ( let i = 0; i !== n; ++ i ) {
-
+			for ( var i = 0; i !== n; ++ i )
 				dstPlanes[ i ] = srcPlanes[ i ].clone();
-
-			}
 
 		}
 

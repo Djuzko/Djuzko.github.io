@@ -1,3 +1,7 @@
+/**
+ * @author WestLangley / http://github.com/WestLangley
+ */
+
 import { Color } from '../math/Color.js';
 import { LightProbe } from './LightProbe.js';
 
@@ -5,7 +9,7 @@ function AmbientLightProbe( color, intensity ) {
 
 	LightProbe.call( this, undefined, intensity );
 
-	const color1 = new Color().set( color );
+	var color1 = new Color().set( color );
 
 	// without extra factor of PI in the shader, would be 2 / Math.sqrt( Math.PI );
 	this.sh.coefficients[ 0 ].set( color1.r, color1.g, color1.b ).multiplyScalar( 2 * Math.sqrt( Math.PI ) );
@@ -28,7 +32,7 @@ AmbientLightProbe.prototype = Object.assign( Object.create( LightProbe.prototype
 
 	toJSON: function ( meta ) {
 
-		const data = LightProbe.prototype.toJSON.call( this, meta );
+		var data = LightProbe.prototype.toJSON.call( this, meta );
 
 		// data.sh = this.sh.toArray(); // todo
 

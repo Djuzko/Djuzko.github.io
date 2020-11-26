@@ -1,24 +1,22 @@
-let _canvas;
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
+ * @author szimek / https://github.com/szimek/
+ */
 
-const ImageUtils = {
+var _canvas;
+
+var ImageUtils = {
 
 	getDataURL: function ( image ) {
 
-		if ( /^data:/i.test( image.src ) ) {
-
-			return image.src;
-
-		}
+		var canvas;
 
 		if ( typeof HTMLCanvasElement == 'undefined' ) {
 
 			return image.src;
 
-		}
-
-		let canvas;
-
-		if ( image instanceof HTMLCanvasElement ) {
+		} else if ( image instanceof HTMLCanvasElement ) {
 
 			canvas = image;
 
@@ -29,7 +27,7 @@ const ImageUtils = {
 			_canvas.width = image.width;
 			_canvas.height = image.height;
 
-			const context = _canvas.getContext( '2d' );
+			var context = _canvas.getContext( '2d' );
 
 			if ( image instanceof ImageData ) {
 

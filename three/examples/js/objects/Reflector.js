@@ -1,3 +1,7 @@
+/**
+ * @author Slayvin / http://slayvin.net
+ */
+
 THREE.Reflector = function ( geometry, options ) {
 
 	THREE.Mesh.call( this, geometry );
@@ -13,6 +17,7 @@ THREE.Reflector = function ( geometry, options ) {
 	var textureHeight = options.textureHeight || 512;
 	var clipBias = options.clipBias || 0;
 	var shader = options.shader || THREE.Reflector.ReflectorShader;
+	var encoding = options.encoding !== undefined ? options.encoding : THREE.LinearEncoding;
 
 	//
 
@@ -34,7 +39,9 @@ THREE.Reflector = function ( geometry, options ) {
 	var parameters = {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat
+		format: THREE.RGBFormat,
+		stencilBuffer: false,
+		encoding: encoding
 	};
 
 	var renderTarget = new THREE.WebGLRenderTarget( textureWidth, textureHeight, parameters );
@@ -132,8 +139,6 @@ THREE.Reflector = function ( geometry, options ) {
 		projectionMatrix.elements[ 14 ] = clipPlane.w;
 
 		// Render
-
-		renderTarget.texture.encoding = renderer.outputEncoding;
 
 		scope.visible = false;
 

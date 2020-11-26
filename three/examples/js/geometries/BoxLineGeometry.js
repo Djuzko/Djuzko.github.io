@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 THREE.BoxLineGeometry = function ( width, height, depth, widthSegments, heightSegments, depthSegments ) {
 
 	THREE.BufferGeometry.call( this );

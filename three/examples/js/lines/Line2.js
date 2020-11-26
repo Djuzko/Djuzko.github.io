@@ -1,11 +1,16 @@
+/**
+ * @author WestLangley / http://github.com/WestLangley
+ *
+ */
+
 THREE.Line2 = function ( geometry, material ) {
 
-	if ( geometry === undefined ) geometry = new THREE.LineGeometry();
-	if ( material === undefined ) material = new THREE.LineMaterial( { color: Math.random() * 0xffffff } );
-
-	THREE.LineSegments2.call( this, geometry, material );
+	THREE.LineSegments2.call( this );
 
 	this.type = 'Line2';
+
+	this.geometry = geometry !== undefined ? geometry : new THREE.LineGeometry();
+	this.material = material !== undefined ? material : new THREE.LineMaterial( { color: Math.random() * 0xffffff } );
 
 };
 

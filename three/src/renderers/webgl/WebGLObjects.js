@@ -1,13 +1,17 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 function WebGLObjects( gl, geometries, attributes, info ) {
 
-	let updateMap = new WeakMap();
+	var updateMap = new WeakMap();
 
 	function update( object ) {
 
-		const frame = info.render.frame;
+		var frame = info.render.frame;
 
-		const geometry = object.geometry;
-		const buffergeometry = geometries.get( object, geometry );
+		var geometry = object.geometry;
+		var buffergeometry = geometries.get( object, geometry );
 
 		// Update once per frame
 
@@ -28,12 +32,6 @@ function WebGLObjects( gl, geometries, attributes, info ) {
 		if ( object.isInstancedMesh ) {
 
 			attributes.update( object.instanceMatrix, gl.ARRAY_BUFFER );
-
-			if ( object.instanceColor !== null ) {
-
-				attributes.update( object.instanceColor, gl.ARRAY_BUFFER );
-
-			}
 
 		}
 

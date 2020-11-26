@@ -1,3 +1,7 @@
+/**
+ * @author adrs2002 / https://github.com/adrs2002
+ */
+
 import {
 	AnimationClip,
 	AnimationMixer,
@@ -301,29 +305,9 @@ var XLoader = ( function () {
 				var loader = new FileLoader( this.manager );
 				loader.setPath( this.path );
 				loader.setResponseType( 'arraybuffer' );
-				loader.setRequestHeader( this.requestHeader );
-				loader.setWithCredentials( this.withCredentials );
 				loader.load( this.url, function ( response ) {
 
-					try {
-
-						_this.parse( response, onLoad );
-
-					} catch ( e ) {
-
-						if ( onError ) {
-
-							onError( e );
-
-						} else {
-
-							console.error( e );
-
-						}
-
-						_this.manager.itemError( _this.url );
-
-					}
+					_this.parse( response, onLoad );
 
 				}, onProgress, onError );
 

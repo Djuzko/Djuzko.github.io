@@ -1,4 +1,6 @@
 /**
+ * @author meatbags / xavierburrow.com, github/meatbags
+ *
  * RGB Halftone shader for three.js.
  *	NOTE:
  * 		Shape (1 = Dot, 2 = Ellipse, 3 = Line, 4 = Square)

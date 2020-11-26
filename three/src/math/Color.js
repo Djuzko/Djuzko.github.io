@@ -1,6 +1,10 @@
 import { MathUtils } from './MathUtils.js';
 
-const _colorKeywords = { 'aliceblue': 0xF0F8FF, 'antiquewhite': 0xFAEBD7, 'aqua': 0x00FFFF, 'aquamarine': 0x7FFFD4, 'azure': 0xF0FFFF,
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
+var _colorKeywords = { 'aliceblue': 0xF0F8FF, 'antiquewhite': 0xFAEBD7, 'aqua': 0x00FFFF, 'aquamarine': 0x7FFFD4, 'azure': 0xF0FFFF,
 	'beige': 0xF5F5DC, 'bisque': 0xFFE4C4, 'black': 0x000000, 'blanchedalmond': 0xFFEBCD, 'blue': 0x0000FF, 'blueviolet': 0x8A2BE2,
 	'brown': 0xA52A2A, 'burlywood': 0xDEB887, 'cadetblue': 0x5F9EA0, 'chartreuse': 0x7FFF00, 'chocolate': 0xD2691E, 'coral': 0xFF7F50,
 	'cornflowerblue': 0x6495ED, 'cornsilk': 0xFFF8DC, 'crimson': 0xDC143C, 'cyan': 0x00FFFF, 'darkblue': 0x00008B, 'darkcyan': 0x008B8B,
@@ -25,8 +29,21 @@ const _colorKeywords = { 'aliceblue': 0xF0F8FF, 'antiquewhite': 0xFAEBD7, 'aqua'
 	'springgreen': 0x00FF7F, 'steelblue': 0x4682B4, 'tan': 0xD2B48C, 'teal': 0x008080, 'thistle': 0xD8BFD8, 'tomato': 0xFF6347, 'turquoise': 0x40E0D0,
 	'violet': 0xEE82EE, 'wheat': 0xF5DEB3, 'white': 0xFFFFFF, 'whitesmoke': 0xF5F5F5, 'yellow': 0xFFFF00, 'yellowgreen': 0x9ACD32 };
 
-const _hslA = { h: 0, s: 0, l: 0 };
-const _hslB = { h: 0, s: 0, l: 0 };
+var _hslA = { h: 0, s: 0, l: 0 };
+var _hslB = { h: 0, s: 0, l: 0 };
+
+function Color( r, g, b ) {
+
+	if ( g === undefined && b === undefined ) {
+
+		// r is THREE.Color, hex or string
+		return this.set( r );
+
+	}
+
+	return this.setRGB( r, g, b );
+
+}
 
 function hue2rgb( p, q, t ) {
 
@@ -51,24 +68,13 @@ function LinearToSRGB( c ) {
 
 }
 
-class Color {
+Object.assign( Color.prototype, {
 
-	constructor( r, g, b ) {
+	isColor: true,
 
-		Object.defineProperty( this, 'isColor', { value: true } );
+	r: 1, g: 1, b: 1,
 
-		if ( g === undefined && b === undefined ) {
-
-			// r is THREE.Color, hex or string
-			return this.set( r );
-
-		}
-
-		return this.setRGB( r, g, b );
-
-	}
-
-	set( value ) {
+	set: function ( value ) {
 
 		if ( value && value.isColor ) {
 
@@ -86,9 +92,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setScalar( scalar ) {
+	setScalar: function ( scalar ) {
 
 		this.r = scalar;
 		this.g = scalar;
@@ -96,9 +102,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setHex( hex ) {
+	setHex: function ( hex ) {
 
 		hex = Math.floor( hex );
 
@@ -108,9 +114,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setRGB( r, g, b ) {
+	setRGB: function ( r, g, b ) {
 
 		this.r = r;
 		this.g = g;
@@ -118,9 +124,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setHSL( h, s, l ) {
+	setHSL: function ( h, s, l ) {
 
 		// h,s,l ranges are in 0.0 - 1.0
 		h = MathUtils.euclideanModulo( h, 1 );
@@ -133,8 +139,8 @@ class Color {
 
 		} else {
 
-			const p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s );
-			const q = ( 2 * l ) - p;
+			var p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s );
+			var q = ( 2 * l ) - p;
 
 			this.r = hue2rgb( q, p, h + 1 / 3 );
 			this.g = hue2rgb( q, p, h );
@@ -144,9 +150,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setStyle( style ) {
+	setStyle: function ( style ) {
 
 		function handleAlpha( string ) {
 
@@ -161,15 +167,15 @@ class Color {
 		}
 
 
-		let m;
+		var m;
 
 		if ( m = /^((?:rgb|hsl)a?)\(\s*([^\)]*)\)/.exec( style ) ) {
 
 			// rgb / hsl
 
-			let color;
-			const name = m[ 1 ];
-			const components = m[ 2 ];
+			var color;
+			var name = m[ 1 ];
+			var components = m[ 2 ];
 
 			switch ( name ) {
 
@@ -210,9 +216,9 @@ class Color {
 					if ( color = /^([0-9]*\.?[0-9]+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(,\s*([0-9]*\.?[0-9]+)\s*)?$/.exec( components ) ) {
 
 						// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
-						const h = parseFloat( color[ 1 ] ) / 360;
-						const s = parseInt( color[ 2 ], 10 ) / 100;
-						const l = parseInt( color[ 3 ], 10 ) / 100;
+						var h = parseFloat( color[ 1 ] ) / 360;
+						var s = parseInt( color[ 2 ], 10 ) / 100;
+						var l = parseInt( color[ 3 ], 10 ) / 100;
 
 						handleAlpha( color[ 5 ] );
 
@@ -228,8 +234,8 @@ class Color {
 
 			// hex color
 
-			const hex = m[ 1 ];
-			const size = hex.length;
+			var hex = m[ 1 ];
+			var size = hex.length;
 
 			if ( size === 3 ) {
 
@@ -261,12 +267,12 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	setColorName( style ) {
+	setColorName: function ( style ) {
 
 		// color keywords
-		const hex = _colorKeywords[ style ];
+		var hex = _colorKeywords[ style ];
 
 		if ( hex !== undefined ) {
 
@@ -282,15 +288,15 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	clone() {
+	clone: function () {
 
 		return new this.constructor( this.r, this.g, this.b );
 
-	}
+	},
 
-	copy( color ) {
+	copy: function ( color ) {
 
 		this.r = color.r;
 		this.g = color.g;
@@ -298,9 +304,11 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	copyGammaToLinear( color, gammaFactor = 2.0 ) {
+	copyGammaToLinear: function ( color, gammaFactor ) {
+
+		if ( gammaFactor === undefined ) gammaFactor = 2.0;
 
 		this.r = Math.pow( color.r, gammaFactor );
 		this.g = Math.pow( color.g, gammaFactor );
@@ -308,11 +316,13 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	copyLinearToGamma( color, gammaFactor = 2.0 ) {
+	copyLinearToGamma: function ( color, gammaFactor ) {
 
-		const safeInverse = ( gammaFactor > 0 ) ? ( 1.0 / gammaFactor ) : 1.0;
+		if ( gammaFactor === undefined ) gammaFactor = 2.0;
+
+		var safeInverse = ( gammaFactor > 0 ) ? ( 1.0 / gammaFactor ) : 1.0;
 
 		this.r = Math.pow( color.r, safeInverse );
 		this.g = Math.pow( color.g, safeInverse );
@@ -320,25 +330,25 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	convertGammaToLinear( gammaFactor ) {
+	convertGammaToLinear: function ( gammaFactor ) {
 
 		this.copyGammaToLinear( this, gammaFactor );
 
 		return this;
 
-	}
+	},
 
-	convertLinearToGamma( gammaFactor ) {
+	convertLinearToGamma: function ( gammaFactor ) {
 
 		this.copyLinearToGamma( this, gammaFactor );
 
 		return this;
 
-	}
+	},
 
-	copySRGBToLinear( color ) {
+	copySRGBToLinear: function ( color ) {
 
 		this.r = SRGBToLinear( color.r );
 		this.g = SRGBToLinear( color.g );
@@ -346,9 +356,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	copyLinearToSRGB( color ) {
+	copyLinearToSRGB: function ( color ) {
 
 		this.r = LinearToSRGB( color.r );
 		this.g = LinearToSRGB( color.g );
@@ -356,37 +366,37 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	convertSRGBToLinear() {
+	convertSRGBToLinear: function () {
 
 		this.copySRGBToLinear( this );
 
 		return this;
 
-	}
+	},
 
-	convertLinearToSRGB() {
+	convertLinearToSRGB: function () {
 
 		this.copyLinearToSRGB( this );
 
 		return this;
 
-	}
+	},
 
-	getHex() {
+	getHex: function () {
 
 		return ( this.r * 255 ) << 16 ^ ( this.g * 255 ) << 8 ^ ( this.b * 255 ) << 0;
 
-	}
+	},
 
-	getHexString() {
+	getHexString: function () {
 
 		return ( '000000' + this.getHex().toString( 16 ) ).slice( - 6 );
 
-	}
+	},
 
-	getHSL( target ) {
+	getHSL: function ( target ) {
 
 		// h,s,l ranges are in 0.0 - 1.0
 
@@ -397,13 +407,13 @@ class Color {
 
 		}
 
-		const r = this.r, g = this.g, b = this.b;
+		var r = this.r, g = this.g, b = this.b;
 
-		const max = Math.max( r, g, b );
-		const min = Math.min( r, g, b );
+		var max = Math.max( r, g, b );
+		var min = Math.min( r, g, b );
 
-		let hue, saturation;
-		const lightness = ( min + max ) / 2.0;
+		var hue, saturation;
+		var lightness = ( min + max ) / 2.0;
 
 		if ( min === max ) {
 
@@ -412,7 +422,7 @@ class Color {
 
 		} else {
 
-			const delta = max - min;
+			var delta = max - min;
 
 			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
 
@@ -434,15 +444,15 @@ class Color {
 
 		return target;
 
-	}
+	},
 
-	getStyle() {
+	getStyle: function () {
 
 		return 'rgb(' + ( ( this.r * 255 ) | 0 ) + ',' + ( ( this.g * 255 ) | 0 ) + ',' + ( ( this.b * 255 ) | 0 ) + ')';
 
-	}
+	},
 
-	offsetHSL( h, s, l ) {
+	offsetHSL: function ( h, s, l ) {
 
 		this.getHSL( _hslA );
 
@@ -452,9 +462,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	add( color ) {
+	add: function ( color ) {
 
 		this.r += color.r;
 		this.g += color.g;
@@ -462,9 +472,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	addColors( color1, color2 ) {
+	addColors: function ( color1, color2 ) {
 
 		this.r = color1.r + color2.r;
 		this.g = color1.g + color2.g;
@@ -472,9 +482,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	addScalar( s ) {
+	addScalar: function ( s ) {
 
 		this.r += s;
 		this.g += s;
@@ -482,9 +492,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	sub( color ) {
+	sub: function ( color ) {
 
 		this.r = Math.max( 0, this.r - color.r );
 		this.g = Math.max( 0, this.g - color.g );
@@ -492,9 +502,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	multiply( color ) {
+	multiply: function ( color ) {
 
 		this.r *= color.r;
 		this.g *= color.g;
@@ -502,9 +512,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	multiplyScalar( s ) {
+	multiplyScalar: function ( s ) {
 
 		this.r *= s;
 		this.g *= s;
@@ -512,9 +522,9 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	lerp( color, alpha ) {
+	lerp: function ( color, alpha ) {
 
 		this.r += ( color.r - this.r ) * alpha;
 		this.g += ( color.g - this.g ) * alpha;
@@ -522,30 +532,32 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	lerpHSL( color, alpha ) {
+	lerpHSL: function ( color, alpha ) {
 
 		this.getHSL( _hslA );
 		color.getHSL( _hslB );
 
-		const h = MathUtils.lerp( _hslA.h, _hslB.h, alpha );
-		const s = MathUtils.lerp( _hslA.s, _hslB.s, alpha );
-		const l = MathUtils.lerp( _hslA.l, _hslB.l, alpha );
+		var h = MathUtils.lerp( _hslA.h, _hslB.h, alpha );
+		var s = MathUtils.lerp( _hslA.s, _hslB.s, alpha );
+		var l = MathUtils.lerp( _hslA.l, _hslB.l, alpha );
 
 		this.setHSL( h, s, l );
 
 		return this;
 
-	}
+	},
 
-	equals( c ) {
+	equals: function ( c ) {
 
 		return ( c.r === this.r ) && ( c.g === this.g ) && ( c.b === this.b );
 
-	}
+	},
 
-	fromArray( array, offset = 0 ) {
+	fromArray: function ( array, offset ) {
+
+		if ( offset === undefined ) offset = 0;
 
 		this.r = array[ offset ];
 		this.g = array[ offset + 1 ];
@@ -553,9 +565,12 @@ class Color {
 
 		return this;
 
-	}
+	},
 
-	toArray( array = [], offset = 0 ) {
+	toArray: function ( array, offset ) {
+
+		if ( array === undefined ) array = [];
+		if ( offset === undefined ) offset = 0;
 
 		array[ offset ] = this.r;
 		array[ offset + 1 ] = this.g;
@@ -563,40 +578,16 @@ class Color {
 
 		return array;
 
-	}
+	},
 
-	fromBufferAttribute( attribute, index ) {
-
-		this.r = attribute.getX( index );
-		this.g = attribute.getY( index );
-		this.b = attribute.getZ( index );
-
-		if ( attribute.normalized === true ) {
-
-			// assuming Uint8Array
-
-			this.r /= 255;
-			this.g /= 255;
-			this.b /= 255;
-
-		}
-
-		return this;
-
-	}
-
-	toJSON() {
+	toJSON: function () {
 
 		return this.getHex();
 
 	}
 
-}
+} );
 
 Color.NAMES = _colorKeywords;
-Color.prototype.r = 1;
-Color.prototype.g = 1;
-Color.prototype.b = 1;
-
 
 export { Color };

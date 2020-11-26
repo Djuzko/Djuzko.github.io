@@ -1,8 +1,10 @@
 /**
+ * @author jbouny / https://github.com/jbouny
+ *
  * Work based on :
- * http://slayvin.net : Flat mirror for three.js
- * http://www.adelphi.edu/~stemkoski : An implementation of water shader based on the flat mirror
- * http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
+ * @author Slayvin / http://slayvin.net : Flat mirror for three.js
+ * @author Stemkoski / http://www.adelphi.edu/~stemkoski : An implementation of water shader based on the flat mirror
+ * @author Jonas Wagner / http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
  */
 
 THREE.Water = function ( geometry, options ) {
@@ -49,7 +51,8 @@ THREE.Water = function ( geometry, options ) {
 	var parameters = {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat
+		format: THREE.RGBFormat,
+		stencilBuffer: false
 	};
 
 	var renderTarget = new THREE.WebGLRenderTarget( textureWidth, textureHeight, parameters );
@@ -99,8 +102,6 @@ THREE.Water = function ( geometry, options ) {
 			'	vec4 mvPosition =  modelViewMatrix * vec4( position, 1.0 );',
 			'	gl_Position = projectionMatrix * mvPosition;',
 
-			'#include <beginnormal_vertex>',
-			'#include <defaultnormal_vertex>',
 			'#include <logdepthbuf_vertex>',
 			'#include <fog_vertex>',
 			'#include <shadowmap_vertex>',
@@ -281,25 +282,7 @@ THREE.Water = function ( geometry, options ) {
 
 		eye.setFromMatrixPosition( camera.matrixWorld );
 
-		// Render
-
-		if ( renderer.outputEncoding !== THREE.LinearEncoding ) {
-
-			console.warn( 'THREE.Water: WebGLRenderer must use LinearEncoding as outputEncoding.' );
-			scope.onBeforeRender = function () {};
-
-			return;
-
-		}
-
-		if ( renderer.toneMapping !== THREE.NoToneMapping ) {
-
-			console.warn( 'THREE.Water: WebGLRenderer must use NoToneMapping as toneMapping.' );
-			scope.onBeforeRender = function () {};
-
-			return;
-
-		}
+		//
 
 		var currentRenderTarget = renderer.getRenderTarget();
 

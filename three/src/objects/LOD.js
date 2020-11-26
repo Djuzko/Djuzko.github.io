@@ -1,8 +1,14 @@
 import { Vector3 } from '../math/Vector3.js';
 import { Object3D } from '../core/Object3D.js';
 
-const _v1 = new Vector3();
-const _v2 = new Vector3();
+/**
+ * @author mikael emtinger / http://gomo.se/
+ * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
+ */
+
+var _v1 = new Vector3();
+var _v2 = new Vector3();
 
 function LOD() {
 
@@ -33,11 +39,11 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		Object3D.prototype.copy.call( this, source, false );
 
-		const levels = source.levels;
+		var levels = source.levels;
 
-		for ( let i = 0, l = levels.length; i < l; i ++ ) {
+		for ( var i = 0, l = levels.length; i < l; i ++ ) {
 
-			const level = levels[ i ];
+			var level = levels[ i ];
 
 			this.addLevel( level.object.clone(), level.distance );
 
@@ -49,15 +55,15 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	},
 
-	addLevel: function ( object, distance = 0 ) {
+	addLevel: function ( object, distance ) {
+
+		if ( distance === undefined ) distance = 0;
 
 		distance = Math.abs( distance );
 
-		const levels = this.levels;
+		var levels = this.levels;
 
-		let l;
-
-		for ( l = 0; l < levels.length; l ++ ) {
+		for ( var l = 0; l < levels.length; l ++ ) {
 
 			if ( distance < levels[ l ].distance ) {
 
@@ -83,13 +89,11 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	getObjectForDistance: function ( distance ) {
 
-		const levels = this.levels;
+		var levels = this.levels;
 
 		if ( levels.length > 0 ) {
 
-			let i, l;
-
-			for ( i = 1, l = levels.length; i < l; i ++ ) {
+			for ( var i = 1, l = levels.length; i < l; i ++ ) {
 
 				if ( distance < levels[ i ].distance ) {
 
@@ -109,13 +113,13 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	raycast: function ( raycaster, intersects ) {
 
-		const levels = this.levels;
+		var levels = this.levels;
 
 		if ( levels.length > 0 ) {
 
 			_v1.setFromMatrixPosition( this.matrixWorld );
 
-			const distance = raycaster.ray.origin.distanceTo( _v1 );
+			var distance = raycaster.ray.origin.distanceTo( _v1 );
 
 			this.getObjectForDistance( distance ).raycast( raycaster, intersects );
 
@@ -125,20 +129,18 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	update: function ( camera ) {
 
-		const levels = this.levels;
+		var levels = this.levels;
 
 		if ( levels.length > 1 ) {
 
 			_v1.setFromMatrixPosition( camera.matrixWorld );
 			_v2.setFromMatrixPosition( this.matrixWorld );
 
-			const distance = _v1.distanceTo( _v2 ) / camera.zoom;
+			var distance = _v1.distanceTo( _v2 ) / camera.zoom;
 
 			levels[ 0 ].object.visible = true;
 
-			let i, l;
-
-			for ( i = 1, l = levels.length; i < l; i ++ ) {
+			for ( var i = 1, l = levels.length; i < l; i ++ ) {
 
 				if ( distance >= levels[ i ].distance ) {
 
@@ -167,17 +169,17 @@ LOD.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	toJSON: function ( meta ) {
 
-		const data = Object3D.prototype.toJSON.call( this, meta );
+		var data = Object3D.prototype.toJSON.call( this, meta );
 
 		if ( this.autoUpdate === false ) data.object.autoUpdate = false;
 
 		data.object.levels = [];
 
-		const levels = this.levels;
+		var levels = this.levels;
 
-		for ( let i = 0, l = levels.length; i < l; i ++ ) {
+		for ( var i = 0, l = levels.length; i < l; i ++ ) {
 
-			const level = levels[ i ];
+			var level = levels[ i ];
 
 			data.object.levels.push( {
 				object: level.object.uuid,

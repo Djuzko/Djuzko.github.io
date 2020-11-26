@@ -1,3 +1,8 @@
+/**
+ * @author WestLangley / http://github.com/WestLangley
+ *
+ */
+
 THREE.LineSegmentsGeometry = function () {
 
 	THREE.InstancedBufferGeometry.call( this );
@@ -31,7 +36,7 @@ THREE.LineSegmentsGeometry.prototype = Object.assign( Object.create( THREE.Insta
 
 			end.applyMatrix4( matrix );
 
-			start.needsUpdate = true;
+			start.data.needsUpdate = true;
 
 		}
 

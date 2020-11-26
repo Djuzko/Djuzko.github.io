@@ -1,3 +1,8 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
+ */
+
 THREE.ColladaLoader = function ( manager ) {
 
 	THREE.Loader.call( this, manager );
@@ -16,29 +21,9 @@ THREE.ColladaLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 		var loader = new THREE.FileLoader( scope.manager );
 		loader.setPath( scope.path );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( text ) {
 
-			try {
-
-				onLoad( scope.parse( text, path ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( text, path ) );
 
 		}, onProgress, onError );
 
@@ -232,8 +217,6 @@ THREE.ColladaLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 				channels: {}
 			};
 
-			var hasChildren = false;
-
 			for ( var i = 0, l = xml.childNodes.length; i < l; i ++ ) {
 
 				var child = xml.childNodes[ i ];
@@ -259,12 +242,6 @@ THREE.ColladaLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 						data.channels[ id ] = parseAnimationChannel( child );
 						break;
 
-					case 'animation':
-						// hierarchy of related animations
-						parseAnimation( child );
-						hasChildren = true;
-						break;
-
 					default:
 						console.log( child );
 
@@ -272,13 +249,7 @@ THREE.ColladaLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 			}
 
-			if ( hasChildren === false ) {
-
-				// since 'id' attributes can be optional, it's necessary to generate a UUID for unqiue assignment
-
-				library.animations[ xml.getAttribute( 'id' ) || THREE.MathUtils.generateUUID() ] = data;
-
-			}
+			library.animations[ xml.getAttribute( 'id' ) ] = data;
 
 		}
 
@@ -3587,7 +3558,12 @@ THREE.ColladaLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 			}
 
-			object.name = ( type === 'JOINT' ) ? data.sid : data.name;
+			if ( object.name === '' ) {
+
+				object.name = ( type === 'JOINT' ) ? data.sid : data.name;
+
+			}
+
 			object.matrix.copy( matrix );
 			object.matrix.decompose( object.position, object.quaternion, object.scale );
 

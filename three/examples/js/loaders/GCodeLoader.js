@@ -5,6 +5,8 @@
  *
  * @class THREE.GCodeLoader
  * @param {Manager} manager Loading manager.
+ * @author tentone
+ * @author joewalnes
  */
 
 THREE.GCodeLoader = function ( manager ) {
@@ -25,29 +27,9 @@ THREE.GCodeLoader.prototype = Object.assign( Object.create( THREE.Loader.prototy
 
 		var loader = new THREE.FileLoader( scope.manager );
 		loader.setPath( scope.path );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( text ) {
 
-			try {
-
-				onLoad( scope.parse( text ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( text ) );
 
 		}, onProgress, onError );
 
@@ -221,20 +203,9 @@ THREE.GCodeLoader.prototype = Object.assign( Object.create( THREE.Loader.prototy
 			for ( var i = 0; i < layers.length; i ++ ) {
 
 				var layer = layers[ i ];
-				var layerVertex = layer.vertex;
-				var layerPathVertex = layer.pathVertex;
 
-				for ( var j = 0; j < layerVertex.length; j ++ ) {
-
-					vertex.push( layerVertex[ j ] );
-
-				}
-
-				for ( var j = 0; j < layerPathVertex.length; j ++ ) {
-
-					pathVertex.push( layerPathVertex[ j ] );
-
-				}
+				vertex = vertex.concat( layer.vertex );
+				pathVertex = pathVertex.concat( layer.pathVertex );
 
 			}
 

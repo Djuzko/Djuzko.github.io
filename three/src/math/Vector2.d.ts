@@ -1,22 +1,16 @@
 import { Matrix3 } from './Matrix3';
 import { BufferAttribute } from './../core/BufferAttribute';
 
-type Vector2tuple = [number, number];
-
 /**
- * ( interface Vector<T> )
+ * ( interface Vector&lt;T&gt; )
  *
- * Abstract interface of {@link https://github.com/mrdoob/three.js/blob/master/src/math/Vector2.js|Vector2},
- * {@link https://github.com/mrdoob/three.js/blob/master/src/math/Vector3.js|Vector3}
- * and {@link https://github.com/mrdoob/three.js/blob/master/src/math/Vector4.js|Vector4}.
- *
+ * Abstract interface of Vector2, Vector3 and Vector4.
  * Currently the members of Vector is NOT type safe because it accepts different typed vectors.
- *
  * Those definitions will be changed when TypeScript innovates Generics to be type safe.
  *
  * @example
- * const v:THREE.Vector = new THREE.Vector3();
- * v.addVectors(new THREE.Vector2(0, 1), new THREE.Vector2(2, 3)); // invalid but compiled successfully
+ * var v:THREE.Vector = new THREE.Vector3();
+ * v.addVectors(new THREE.Vector2(0, 1), new THREE.Vector2(2, 3));		// invalid but compiled successfully
  */
 export interface Vector {
 	setComponent( index: number, value: number ): this;
@@ -37,7 +31,7 @@ export interface Vector {
 	 *
 	 * add(v:T):T;
 	 */
-	add( v: Vector ): this;
+	add( v: Vector, w?: Vector ): this;
 
 	/**
 	 * addVectors(a:T, b:T):T;
@@ -140,14 +134,7 @@ export class Vector2 implements Vector {
 
 	constructor( x?: number, y?: number );
 
-	/**
-	 * @default 0
-	 */
 	x: number;
-
-	/**
-	 * @default 0
-	 */
 	y: number;
 	width: number;
 	height: number;
@@ -429,7 +416,6 @@ export class Vector2 implements Vector {
 	 * @return The created or provided array.
 	 */
 	toArray( array?: number[], offset?: number ): number[];
-	toArray( array?: Vector2tuple, offset?: 0 ): Vector2tuple;
 
 	/**
 	 * Copies x and y into the provided array-like.
@@ -452,6 +438,26 @@ export class Vector2 implements Vector {
 	 * @param angle the angle to rotate, in radians.
 	 */
 	rotateAround( center: Vector2, angle: number ): this;
+
+	/**
+	 * Computes the Manhattan length of this vector.
+	 *
+	 * @return {number}
+	 *
+	 * @see {@link http://en.wikipedia.org/wiki/Taxicab_geometry|Wikipedia: Taxicab Geometry}
+	 */
+	manhattanLength(): number;
+
+	/**
+	 * Computes the Manhattan length (distance) from this vector to the given vector v
+	 *
+	 * @param {Vector2} v
+	 *
+	 * @return {number}
+	 *
+	 * @see {@link http://en.wikipedia.org/wiki/Taxicab_geometry|Wikipedia: Taxicab Geometry}
+	 */
+	manhattanDistanceTo( v: Vector2 ): number;
 
 	/**
 	 * Sets this vector's x and y from Math.random

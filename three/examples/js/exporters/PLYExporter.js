@@ -1,4 +1,5 @@
 /**
+ * @author Garrett Johnson / http://gkjohnson.github.io/
  * https://github.com/gkjohnson/ply-exporter-js
  *
  * Usage:
@@ -45,7 +46,7 @@ THREE.PLYExporter.prototype = {
 
 					if ( geometry.isBufferGeometry === true ) {
 
-						if ( geometry.hasAttribute( 'position' ) === true ) {
+						if ( geometry.getAttribute( 'position' ) !== undefined ) {
 
 							cb( mesh, geometry );
 

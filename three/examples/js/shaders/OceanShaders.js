@@ -1,3 +1,6 @@
+/* Author: Aleksandr Albert
+// Website: www.routter.co.tt
+
 // Description: A deep water ocean shader set
 // based on an implementation of a Tessendorf Waves
 // originally presented by David Li ( www.david.li/waves )
@@ -17,6 +20,7 @@
 
 // -- Rendering Shader
 // [7] ocean_main               -> Vertex and Fragment shader used to create the final render
+*/
 
 THREE.OceanShaders = {};
 THREE.OceanShaders[ "ocean_sim_vertex" ] = {

@@ -1,5 +1,11 @@
+/**
+ * @author Mugen87 / https://github.com/Mugen87
+ *
+ */
+
 import {
 	Color,
+	LinearEncoding,
 	LinearFilter,
 	MathUtils,
 	Matrix4,
@@ -30,6 +36,7 @@ var Refractor = function ( geometry, options ) {
 	var textureHeight = options.textureHeight || 512;
 	var clipBias = options.clipBias || 0;
 	var shader = options.shader || Refractor.RefractorShader;
+	var encoding = options.encoding !== undefined ? options.encoding : LinearEncoding;
 
 	//
 
@@ -47,7 +54,9 @@ var Refractor = function ( geometry, options ) {
 	var parameters = {
 		minFilter: LinearFilter,
 		magFilter: LinearFilter,
-		format: RGBFormat
+		format: RGBFormat,
+		stencilBuffer: false,
+		encoding: encoding
 	};
 
 	var renderTarget = new WebGLRenderTarget( textureWidth, textureHeight, parameters );
@@ -131,7 +140,7 @@ var Refractor = function ( geometry, options ) {
 		return function updateVirtualCamera( camera ) {
 
 			virtualCamera.matrixWorld.copy( camera.matrixWorld );
-			virtualCamera.matrixWorldInverse.copy( virtualCamera.matrixWorld ).invert();
+			virtualCamera.matrixWorldInverse.getInverse( virtualCamera.matrixWorld );
 			virtualCamera.projectionMatrix.copy( camera.projectionMatrix );
 			virtualCamera.far = camera.far; // used in WebGLBackground
 
@@ -231,10 +240,6 @@ var Refractor = function ( geometry, options ) {
 	//
 
 	this.onBeforeRender = function ( renderer, scene, camera ) {
-
-		// Render
-
-		renderTarget.texture.encoding = renderer.outputEncoding;
 
 		// ensure refractors are rendered only once per frame
 

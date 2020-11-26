@@ -1,5 +1,9 @@
 import { BufferAttribute } from './BufferAttribute.js';
 
+/**
+ * @author benaadams / https://twitter.com/ben_a_adams
+ */
+
 function InstancedBufferAttribute( array, itemSize, normalized, meshPerAttribute ) {
 
 	if ( typeof ( normalized ) === 'number' ) {
@@ -36,7 +40,7 @@ InstancedBufferAttribute.prototype = Object.assign( Object.create( BufferAttribu
 
 	toJSON: function ()	{
 
-		const data = BufferAttribute.prototype.toJSON.call( this );
+		var data = BufferAttribute.prototype.toJSON.call( this );
 
 		data.meshPerAttribute = this.meshPerAttribute;
 

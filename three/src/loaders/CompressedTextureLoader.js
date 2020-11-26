@@ -4,6 +4,8 @@ import { CompressedTexture } from '../textures/CompressedTexture.js';
 import { Loader } from './Loader.js';
 
 /**
+ * @author mrdoob / http://mrdoob.com/
+ *
  * Abstract Base class to block based textures loader (dds, pvr, ...)
  *
  * Sub classes have to implement the parse() method which will be used in load().
@@ -21,26 +23,22 @@ CompressedTextureLoader.prototype = Object.assign( Object.create( Loader.prototy
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
-		const scope = this;
+		var scope = this;
 
-		const images = [];
+		var images = [];
 
-		const texture = new CompressedTexture();
+		var texture = new CompressedTexture();
 		texture.image = images;
 
-		const loader = new FileLoader( this.manager );
+		var loader = new FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.setResponseType( 'arraybuffer' );
-		loader.setRequestHeader( this.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
-
-		let loaded = 0;
 
 		function loadTexture( i ) {
 
 			loader.load( url[ i ], function ( buffer ) {
 
-				const texDatas = scope.parse( buffer, true );
+				var texDatas = scope.parse( buffer, true );
 
 				images[ i ] = {
 					width: texDatas.width,
@@ -69,7 +67,9 @@ CompressedTextureLoader.prototype = Object.assign( Object.create( Loader.prototy
 
 		if ( Array.isArray( url ) ) {
 
-			for ( let i = 0, il = url.length; i < il; ++ i ) {
+			var loaded = 0;
+
+			for ( var i = 0, il = url.length; i < il; ++ i ) {
 
 				loadTexture( i );
 
@@ -81,17 +81,17 @@ CompressedTextureLoader.prototype = Object.assign( Object.create( Loader.prototy
 
 			loader.load( url, function ( buffer ) {
 
-				const texDatas = scope.parse( buffer, true );
+				var texDatas = scope.parse( buffer, true );
 
 				if ( texDatas.isCubemap ) {
 
-					const faces = texDatas.mipmaps.length / texDatas.mipmapCount;
+					var faces = texDatas.mipmaps.length / texDatas.mipmapCount;
 
-					for ( let f = 0; f < faces; f ++ ) {
+					for ( var f = 0; f < faces; f ++ ) {
 
 						images[ f ] = { mipmaps: [] };
 
-						for ( let i = 0; i < texDatas.mipmapCount; i ++ ) {
+						for ( var i = 0; i < texDatas.mipmapCount; i ++ ) {
 
 							images[ f ].mipmaps.push( texDatas.mipmaps[ f * texDatas.mipmapCount + i ] );
 							images[ f ].format = texDatas.format;

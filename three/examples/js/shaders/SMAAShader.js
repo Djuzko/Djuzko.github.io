@@ -1,4 +1,6 @@
 /**
+ * @author mpk / http://polko.me/
+ *
  * WebGL port of Subpixel Morphological Antialiasing (SMAA) v2.8
  * Preset: SMAA 1x Medium (with color edge detection)
  * https://github.com/iryoku/smaa/releases/tag/v2.8

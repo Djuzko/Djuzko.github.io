@@ -1,4 +1,6 @@
 /**
+ * @author Mugen87 / https://github.com/Mugen87
+ *
  * References:
  * http://john-chapman-graphics.blogspot.com/2013/01/ssao-tutorial.html
  * https://learnopengl.com/Advanced-Lighting/SSAO
@@ -84,7 +86,7 @@ THREE.SSAOShader = {
 
 		"	#else",
 
-		"		return texture2D( tDepth, screenPosition ).x;",
+		"		return texture2D( depthSampler, coord ).x;",
 
 		"	#endif",
 
@@ -221,7 +223,7 @@ THREE.SSAODepthShader = {
 
 		"	#else",
 
-		"		return texture2D( tDepth, screenPosition ).x;",
+		"		return texture2D( depthSampler, coord ).x;",
 
 		"	#endif",
 

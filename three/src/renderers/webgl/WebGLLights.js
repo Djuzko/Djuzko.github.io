@@ -1,12 +1,15 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 import { Color } from '../../math/Color.js';
 import { Matrix4 } from '../../math/Matrix4.js';
 import { Vector2 } from '../../math/Vector2.js';
 import { Vector3 } from '../../math/Vector3.js';
-import { UniformsLib } from '../shaders/UniformsLib.js';
 
 function UniformsCache() {
 
-	const lights = {};
+	var lights = {};
 
 	return {
 
@@ -18,7 +21,7 @@ function UniformsCache() {
 
 			}
 
-			let uniforms;
+			var uniforms;
 
 			switch ( light.type ) {
 
@@ -81,7 +84,7 @@ function UniformsCache() {
 
 function ShadowUniformsCache() {
 
-	const lights = {};
+	var lights = {};
 
 	return {
 
@@ -93,14 +96,13 @@ function ShadowUniformsCache() {
 
 			}
 
-			let uniforms;
+			var uniforms;
 
 			switch ( light.type ) {
 
 				case 'DirectionalLight':
 					uniforms = {
 						shadowBias: 0,
-						shadowNormalBias: 0,
 						shadowRadius: 1,
 						shadowMapSize: new Vector2()
 					};
@@ -109,7 +111,6 @@ function ShadowUniformsCache() {
 				case 'SpotLight':
 					uniforms = {
 						shadowBias: 0,
-						shadowNormalBias: 0,
 						shadowRadius: 1,
 						shadowMapSize: new Vector2()
 					};
@@ -118,7 +119,6 @@ function ShadowUniformsCache() {
 				case 'PointLight':
 					uniforms = {
 						shadowBias: 0,
-						shadowNormalBias: 0,
 						shadowRadius: 1,
 						shadowMapSize: new Vector2(),
 						shadowCameraNear: 1,
@@ -142,7 +142,7 @@ function ShadowUniformsCache() {
 
 
 
-let nextVersion = 0;
+var nextVersion = 0;
 
 function shadowCastingLightsFirst( lightA, lightB ) {
 
@@ -150,13 +150,13 @@ function shadowCastingLightsFirst( lightA, lightB ) {
 
 }
 
-function WebGLLights( extensions, capabilities ) {
+function WebGLLights() {
 
-	const cache = new UniformsCache();
+	var cache = new UniformsCache();
 
-	const shadowCache = ShadowUniformsCache();
+	var shadowCache = ShadowUniformsCache();
 
-	const state = {
+	var state = {
 
 		version: 0,
 
@@ -183,8 +183,6 @@ function WebGLLights( extensions, capabilities ) {
 		spotShadowMap: [],
 		spotShadowMatrix: [],
 		rectArea: [],
-		rectAreaLTC1: null,
-		rectAreaLTC2: null,
 		point: [],
 		pointShadow: [],
 		pointShadowMap: [],
@@ -193,41 +191,41 @@ function WebGLLights( extensions, capabilities ) {
 
 	};
 
-	for ( let i = 0; i < 9; i ++ ) state.probe.push( new Vector3() );
+	for ( var i = 0; i < 9; i ++ ) state.probe.push( new Vector3() );
 
-	const vector3 = new Vector3();
-	const matrix4 = new Matrix4();
-	const matrix42 = new Matrix4();
+	var vector3 = new Vector3();
+	var matrix4 = new Matrix4();
+	var matrix42 = new Matrix4();
 
 	function setup( lights, shadows, camera ) {
 
-		let r = 0, g = 0, b = 0;
+		var r = 0, g = 0, b = 0;
 
-		for ( let i = 0; i < 9; i ++ ) state.probe[ i ].set( 0, 0, 0 );
+		for ( var i = 0; i < 9; i ++ ) state.probe[ i ].set( 0, 0, 0 );
 
-		let directionalLength = 0;
-		let pointLength = 0;
-		let spotLength = 0;
-		let rectAreaLength = 0;
-		let hemiLength = 0;
+		var directionalLength = 0;
+		var pointLength = 0;
+		var spotLength = 0;
+		var rectAreaLength = 0;
+		var hemiLength = 0;
 
-		let numDirectionalShadows = 0;
-		let numPointShadows = 0;
-		let numSpotShadows = 0;
+		var numDirectionalShadows = 0;
+		var numPointShadows = 0;
+		var numSpotShadows = 0;
 
-		const viewMatrix = camera.matrixWorldInverse;
+		var viewMatrix = camera.matrixWorldInverse;
 
 		lights.sort( shadowCastingLightsFirst );
 
-		for ( let i = 0, l = lights.length; i < l; i ++ ) {
+		for ( var i = 0, l = lights.length; i < l; i ++ ) {
 
-			const light = lights[ i ];
+			var light = lights[ i ];
 
-			const color = light.color;
-			const intensity = light.intensity;
-			const distance = light.distance;
+			var color = light.color;
+			var intensity = light.intensity;
+			var distance = light.distance;
 
-			const shadowMap = ( light.shadow && light.shadow.map ) ? light.shadow.map.texture : null;
+			var shadowMap = ( light.shadow && light.shadow.map ) ? light.shadow.map.texture : null;
 
 			if ( light.isAmbientLight ) {
 
@@ -237,7 +235,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isLightProbe ) {
 
-				for ( let j = 0; j < 9; j ++ ) {
+				for ( var j = 0; j < 9; j ++ ) {
 
 					state.probe[ j ].addScaledVector( light.sh.coefficients[ j ], intensity );
 
@@ -245,7 +243,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isDirectionalLight ) {
 
-				const uniforms = cache.get( light );
+				var uniforms = cache.get( light );
 
 				uniforms.color.copy( light.color ).multiplyScalar( light.intensity );
 				uniforms.direction.setFromMatrixPosition( light.matrixWorld );
@@ -255,12 +253,11 @@ function WebGLLights( extensions, capabilities ) {
 
 				if ( light.castShadow ) {
 
-					const shadow = light.shadow;
+					var shadow = light.shadow;
 
-					const shadowUniforms = shadowCache.get( light );
+					var shadowUniforms = shadowCache.get( light );
 
 					shadowUniforms.shadowBias = shadow.bias;
-					shadowUniforms.shadowNormalBias = shadow.normalBias;
 					shadowUniforms.shadowRadius = shadow.radius;
 					shadowUniforms.shadowMapSize = shadow.mapSize;
 
@@ -278,7 +275,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isSpotLight ) {
 
-				const uniforms = cache.get( light );
+				var uniforms = cache.get( light );
 
 				uniforms.position.setFromMatrixPosition( light.matrixWorld );
 				uniforms.position.applyMatrix4( viewMatrix );
@@ -297,12 +294,11 @@ function WebGLLights( extensions, capabilities ) {
 
 				if ( light.castShadow ) {
 
-					const shadow = light.shadow;
+					var shadow = light.shadow;
 
-					const shadowUniforms = shadowCache.get( light );
+					var shadowUniforms = shadowCache.get( light );
 
 					shadowUniforms.shadowBias = shadow.bias;
-					shadowUniforms.shadowNormalBias = shadow.normalBias;
 					shadowUniforms.shadowRadius = shadow.radius;
 					shadowUniforms.shadowMapSize = shadow.mapSize;
 
@@ -320,7 +316,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isRectAreaLight ) {
 
-				const uniforms = cache.get( light );
+				var uniforms = cache.get( light );
 
 				// (a) intensity is the total visible light emitted
 				//uniforms.color.copy( color ).multiplyScalar( intensity / ( light.width * light.height * Math.PI ) );
@@ -352,7 +348,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isPointLight ) {
 
-				const uniforms = cache.get( light );
+				var uniforms = cache.get( light );
 
 				uniforms.position.setFromMatrixPosition( light.matrixWorld );
 				uniforms.position.applyMatrix4( viewMatrix );
@@ -363,12 +359,11 @@ function WebGLLights( extensions, capabilities ) {
 
 				if ( light.castShadow ) {
 
-					const shadow = light.shadow;
+					var shadow = light.shadow;
 
-					const shadowUniforms = shadowCache.get( light );
+					var shadowUniforms = shadowCache.get( light );
 
 					shadowUniforms.shadowBias = shadow.bias;
-					shadowUniforms.shadowNormalBias = shadow.normalBias;
 					shadowUniforms.shadowRadius = shadow.radius;
 					shadowUniforms.shadowMapSize = shadow.mapSize;
 					shadowUniforms.shadowCameraNear = shadow.camera.near;
@@ -388,7 +383,7 @@ function WebGLLights( extensions, capabilities ) {
 
 			} else if ( light.isHemisphereLight ) {
 
-				const uniforms = cache.get( light );
+				var uniforms = cache.get( light );
 
 				uniforms.direction.setFromMatrixPosition( light.matrixWorld );
 				uniforms.direction.transformDirection( viewMatrix );
@@ -405,44 +400,11 @@ function WebGLLights( extensions, capabilities ) {
 
 		}
 
-		if ( rectAreaLength > 0 ) {
-
-			if ( capabilities.isWebGL2 ) {
-
-				// WebGL 2
-
-				state.rectAreaLTC1 = UniformsLib.LTC_FLOAT_1;
-				state.rectAreaLTC2 = UniformsLib.LTC_FLOAT_2;
-
-			} else {
-
-				// WebGL 1
-
-				if ( extensions.has( 'OES_texture_float_linear' ) === true ) {
-
-					state.rectAreaLTC1 = UniformsLib.LTC_FLOAT_1;
-					state.rectAreaLTC2 = UniformsLib.LTC_FLOAT_2;
-
-				} else if ( extensions.has( 'OES_texture_half_float_linear' ) === true ) {
-
-					state.rectAreaLTC1 = UniformsLib.LTC_HALF_1;
-					state.rectAreaLTC2 = UniformsLib.LTC_HALF_2;
-
-				} else {
-
-					console.error( 'THREE.WebGLRenderer: Unable to use RectAreaLight. Missing WebGL extensions.' );
-
-				}
-
-			}
-
-		}
-
 		state.ambient[ 0 ] = r;
 		state.ambient[ 1 ] = g;
 		state.ambient[ 2 ] = b;
 
-		const hash = state.hash;
+		var hash = state.hash;
 
 		if ( hash.directionalLength !== directionalLength ||
 			hash.pointLength !== pointLength ||

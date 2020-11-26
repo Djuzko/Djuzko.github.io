@@ -1,3 +1,8 @@
+/**
+ * @author WestLangley / http://github.com/WestLangley
+ *
+ */
+
 THREE.Wireframe = function ( geometry, material ) {
 
 	THREE.Mesh.call( this );

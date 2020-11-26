@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 import { Audio } from './audio/Audio.js';
 import { AudioAnalyser } from './audio/AudioAnalyser.js';
 import { PerspectiveCamera } from './cameras/PerspectiveCamera.js';
@@ -22,7 +26,6 @@ import {
 	BufferAttribute
 } from './core/BufferAttribute.js';
 import { BufferGeometry } from './core/BufferGeometry.js';
-import { InstancedBufferGeometry } from './core/InstancedBufferGeometry.js';
 import { InterleavedBuffer } from './core/InterleavedBuffer.js';
 import { Face3 } from './core/Face3.js';
 import { Geometry } from './core/Geometry.js';
@@ -40,7 +43,7 @@ import { SkeletonHelper } from './helpers/SkeletonHelper.js';
 import { BoxGeometry } from './geometries/BoxGeometry.js';
 import { EdgesGeometry } from './geometries/EdgesGeometry.js';
 import { ExtrudeGeometry } from './geometries/ExtrudeGeometry.js';
-import { ExtrudeBufferGeometry } from './geometries/ExtrudeBufferGeometry.js';
+import { ExtrudeBufferGeometry } from './geometries/ExtrudeGeometry.js';
 import { ShapeGeometry } from './geometries/ShapeGeometry.js';
 import { WireframeGeometry } from './geometries/WireframeGeometry.js';
 import { Light } from './lights/Light.js';
@@ -50,11 +53,11 @@ import { FileLoader } from './loaders/FileLoader.js';
 import { AudioLoader } from './loaders/AudioLoader.js';
 import { CubeTextureLoader } from './loaders/CubeTextureLoader.js';
 import { DataTextureLoader } from './loaders/DataTextureLoader.js';
+import { ObjectLoader } from './loaders/ObjectLoader.js';
 import { TextureLoader } from './loaders/TextureLoader.js';
 import { Material } from './materials/Material.js';
 import { LineBasicMaterial } from './materials/LineBasicMaterial.js';
 import { MeshPhongMaterial } from './materials/MeshPhongMaterial.js';
-import { MeshPhysicalMaterial } from './materials/MeshPhysicalMaterial.js';
 import { PointsMaterial } from './materials/PointsMaterial.js';
 import { ShaderMaterial } from './materials/ShaderMaterial.js';
 import { Box2 } from './math/Box2.js';
@@ -87,7 +90,6 @@ import { WebGLShadowMap } from './renderers/webgl/WebGLShadowMap.js';
 import { ImageUtils } from './extras/ImageUtils.js';
 import { Shape } from './extras/core/Shape.js';
 import { CubeCamera } from './cameras/CubeCamera.js';
-import { Scene } from './scenes/Scene.js';
 
 export { BoxGeometry as CubeGeometry };
 export { MathUtils as Math };
@@ -99,11 +101,11 @@ export function Face4( a, b, c, d, normal, color, materialIndex ) {
 
 }
 
-export const LineStrip = 0;
-export const LinePieces = 1;
-export const NoColors = 0;
-export const FaceColors = 1;
-export const VertexColors = 2;
+export var LineStrip = 0;
+export var LinePieces = 1;
+export var NoColors = 0;
+export var FaceColors = 1;
+export var VertexColors = 2;
 
 export function MeshFaceMaterial( materials ) {
 
@@ -112,7 +114,9 @@ export function MeshFaceMaterial( materials ) {
 
 }
 
-export function MultiMaterial( materials = [] ) {
+export function MultiMaterial( materials ) {
+
+	if ( materials === undefined ) materials = [];
 
 	console.warn( 'THREE.MultiMaterial has been removed. Use an Array instead.' );
 	materials.isMultiMaterial = true;
@@ -272,7 +276,7 @@ Object.assign( CurvePath.prototype, {
 
 		// generate geometry from path points (for Line or Points objects)
 
-		const pts = this.getPoints( divisions );
+		var pts = this.getPoints( divisions );
 		return this.createGeometry( pts );
 
 	},
@@ -283,7 +287,7 @@ Object.assign( CurvePath.prototype, {
 
 		// generate geometry from equidistant sampling along the path
 
-		const pts = this.getSpacedPoints( divisions );
+		var pts = this.getSpacedPoints( divisions );
 		return this.createGeometry( pts );
 
 	},
@@ -292,11 +296,11 @@ Object.assign( CurvePath.prototype, {
 
 		console.warn( 'THREE.CurvePath: .createGeometry() has been removed. Use new THREE.Geometry().setFromPoints( points ) instead.' );
 
-		const geometry = new Geometry();
+		var geometry = new Geometry();
 
-		for ( let i = 0, l = points.length; i < l; i ++ ) {
+		for ( var i = 0, l = points.length; i < l; i ++ ) {
 
-			const point = points[ i ];
+			var point = points[ i ];
 			geometry.vertices.push( new Vector3( point.x, point.y, point.z || 0 ) );
 
 		}
@@ -465,6 +469,17 @@ export function BinaryTextureLoader( manager ) {
 
 }
 
+Object.assign( ObjectLoader.prototype, {
+
+	setTexturePath: function ( value ) {
+
+		console.warn( 'THREE.ObjectLoader: .setTexturePath() has been renamed to .setResourcePath().' );
+		return this.setResourcePath( value );
+
+	}
+
+} );
+
 //
 
 Object.assign( Box2.prototype, {
@@ -608,12 +623,6 @@ Object.assign( Matrix3.prototype, {
 
 		console.error( 'THREE.Matrix3: .applyToVector3Array() has been removed.' );
 
-	},
-	getInverse: function ( matrix ) {
-
-		console.warn( 'THREE.Matrix3: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.' );
-		return this.copy( matrix ).invert();
-
 	}
 
 } );
@@ -719,12 +728,6 @@ Object.assign( Matrix4.prototype, {
 		console.warn( 'THREE.Matrix4: .makeFrustum() has been removed. Use .makePerspective( left, right, top, bottom, near, far ) instead.' );
 		return this.makePerspective( left, right, top, bottom, near, far );
 
-	},
-	getInverse: function ( matrix ) {
-
-		console.warn( 'THREE.Matrix4: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.' );
-		return this.copy( matrix ).invert();
-
 	}
 
 } );
@@ -736,22 +739,12 @@ Plane.prototype.isIntersectionLine = function ( line ) {
 
 };
 
-Object.assign( Quaternion.prototype, {
+Quaternion.prototype.multiplyVector3 = function ( vector ) {
 
-	multiplyVector3: function ( vector ) {
+	console.warn( 'THREE.Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.' );
+	return vector.applyQuaternion( this );
 
-		console.warn( 'THREE.Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.' );
-		return vector.applyQuaternion( this );
-
-	},
-	inverse: function ( ) {
-
-		console.warn( 'THREE.Quaternion: .inverse() has been renamed to invert().' );
-		return this.invert();
-
-	}
-
-} );
+};
 
 Object.assign( Ray.prototype, {
 
@@ -1378,25 +1371,6 @@ Object.defineProperties( BufferGeometry.prototype, {
 
 } );
 
-Object.defineProperties( InstancedBufferGeometry.prototype, {
-
-	maxInstancedCount: {
-		get: function () {
-
-			console.warn( 'THREE.InstancedBufferGeometry: .maxInstancedCount has been renamed to .instanceCount.' );
-			return this.instanceCount;
-
-		},
-		set: function ( value ) {
-
-			console.warn( 'THREE.InstancedBufferGeometry: .maxInstancedCount has been renamed to .instanceCount.' );
-			this.instanceCount = value;
-
-		}
-	}
-
-} );
-
 Object.defineProperties( Raycaster.prototype, {
 
 	linePrecision: {
@@ -1469,18 +1443,6 @@ Object.assign( ExtrudeBufferGeometry.prototype, {
 	addShape: function () {
 
 		console.error( 'THREE.ExtrudeBufferGeometry: .addShape() has been removed.' );
-
-	}
-
-} );
-
-//
-
-Object.assign( Scene.prototype, {
-
-	dispose: function () {
-
-		console.error( 'THREE.Scene: .dispose() has been removed.' );
 
 	}
 
@@ -1590,25 +1552,6 @@ Object.defineProperties( MeshPhongMaterial.prototype, {
 		set: function () {
 
 			console.warn( 'THREE.MeshPhongMaterial: .metal has been removed. Use THREE.MeshStandardMaterial instead' );
-
-		}
-	}
-
-} );
-
-Object.defineProperties( MeshPhysicalMaterial.prototype, {
-
-	transparency: {
-		get: function () {
-
-			console.warn( 'THREE.MeshPhysicalMaterial: .transparency has been renamed to .transmission.' );
-			return this.transmission;
-
-		},
-		set: function ( value ) {
-
-			console.warn( 'THREE.MeshPhysicalMaterial: .transparency has been renamed to .transmission.' );
-			this.transmission = value;
 
 		}
 	}
@@ -1866,20 +1809,7 @@ Object.defineProperties( WebGLRenderer.prototype, {
 			this.outputEncoding = ( value === true ) ? sRGBEncoding : LinearEncoding;
 
 		}
-	},
-	toneMappingWhitePoint: {
-		get: function () {
-
-			console.warn( 'THREE.WebGLRenderer: .toneMappingWhitePoint has been removed.' );
-			return 1.0;
-
-		},
-		set: function () {
-
-			console.warn( 'THREE.WebGLRenderer: .toneMappingWhitePoint has been removed.' );
-
-		}
-	},
+	}
 
 } );
 
@@ -2089,8 +2019,8 @@ Object.defineProperties( Audio.prototype, {
 		value: function ( file ) {
 
 			console.warn( 'THREE.Audio: .load has been deprecated. Use THREE.AudioLoader instead.' );
-			const scope = this;
-			const audioLoader = new AudioLoader();
+			var scope = this;
+			var audioLoader = new AudioLoader();
 			audioLoader.load( file, function ( buffer ) {
 
 				scope.setBuffer( buffer );
@@ -2126,21 +2056,14 @@ CubeCamera.prototype.updateCubeMap = function ( renderer, scene ) {
 
 };
 
-CubeCamera.prototype.clear = function ( renderer, color, depth, stencil ) {
-
-	console.warn( 'THREE.CubeCamera: .clear() is now .renderTarget.clear().' );
-	return this.renderTarget.clear( renderer, color, depth, stencil );
-
-};
-
 //
 
-export const GeometryUtils = {
+export var GeometryUtils = {
 
 	merge: function ( geometry1, geometry2, materialIndexOffset ) {
 
 		console.warn( 'THREE.GeometryUtils: .merge() has been moved to Geometry. Use geometry.merge( geometry2, matrix, materialIndexOffset ) instead.' );
-		let matrix;
+		var matrix;
 
 		if ( geometry2.isMesh ) {
 
@@ -2170,10 +2093,10 @@ ImageUtils.loadTexture = function ( url, mapping, onLoad, onError ) {
 
 	console.warn( 'THREE.ImageUtils.loadTexture has been deprecated. Use THREE.TextureLoader() instead.' );
 
-	const loader = new TextureLoader();
+	var loader = new TextureLoader();
 	loader.setCrossOrigin( this.crossOrigin );
 
-	const texture = loader.load( url, onLoad, undefined, onError );
+	var texture = loader.load( url, onLoad, undefined, onError );
 
 	if ( mapping ) texture.mapping = mapping;
 
@@ -2185,10 +2108,10 @@ ImageUtils.loadTextureCube = function ( urls, mapping, onLoad, onError ) {
 
 	console.warn( 'THREE.ImageUtils.loadTextureCube has been deprecated. Use THREE.CubeTextureLoader() instead.' );
 
-	const loader = new CubeTextureLoader();
+	var loader = new CubeTextureLoader();
 	loader.setCrossOrigin( this.crossOrigin );
 
-	const texture = loader.load( urls, onLoad, undefined, onError );
+	var texture = loader.load( urls, onLoad, undefined, onError );
 
 	if ( mapping ) texture.mapping = mapping;
 
@@ -2226,7 +2149,7 @@ export function JSONLoader() {
 
 //
 
-export const SceneUtils = {
+export var SceneUtils = {
 
 	createMultiMaterialObject: function ( /* geometry, materials */ ) {
 

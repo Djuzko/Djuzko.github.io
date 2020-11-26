@@ -1,3 +1,7 @@
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
 THREE.SceneUtils = {
 
 	createMeshesFromInstancedMesh: function ( instancedMesh ) {

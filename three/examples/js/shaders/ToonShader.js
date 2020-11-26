@@ -1,4 +1,7 @@
 /**
+ * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
+ *
  * Currently contains:
  *
  *	toon1

@@ -1,7 +1,9 @@
 /**
+ * @author renej
  * NURBS utils
  *
  * See NURBSCurve and NURBSSurface.
+ *
  **/
 
 

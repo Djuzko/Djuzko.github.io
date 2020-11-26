@@ -1,3 +1,7 @@
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
 THREE.DotScreenPass = function ( center, angle, scale ) {
 
 	THREE.Pass.call( this );

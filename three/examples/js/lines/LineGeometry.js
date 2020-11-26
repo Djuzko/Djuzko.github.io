@@ -1,3 +1,8 @@
+/**
+ * @author WestLangley / http://github.com/WestLangley
+ *
+ */
+
 THREE.LineGeometry = function () {
 
 	THREE.LineSegmentsGeometry.call( this );

@@ -1,6 +1,11 @@
-class VRButton {
+/**
+ * @author mrdoob / http://mrdoob.com
+ * @author Mugen87 / https://github.com/Mugen87
+ */
 
-	static createButton( renderer, options ) {
+var VRButton = {
+
+	createButton: function ( renderer, options ) {
 
 		if ( options ) {
 
@@ -8,11 +13,9 @@ class VRButton {
 
 		}
 
-		const button = document.createElement( 'button' );
-
 		function showEnterVR( /*device*/ ) {
 
-			let currentSession = null;
+			var currentSession = null;
 
 			function onSessionStarted( session ) {
 
@@ -68,7 +71,7 @@ class VRButton {
 					// ('local' is always available for immersive sessions and doesn't need to
 					// be requested separately.)
 
-					const sessionInit = { optionalFeatures: [ 'local-floor', 'bounded-floor', 'hand-tracking' ] };
+					var sessionInit = { optionalFeatures: [ 'local-floor', 'bounded-floor' ] };
 					navigator.xr.requestSession( 'immersive-vr', sessionInit ).then( onSessionStarted );
 
 				} else {
@@ -123,7 +126,7 @@ class VRButton {
 
 		if ( 'xr' in navigator ) {
 
-			button.id = 'VRButton';
+			var button = document.createElement( 'button' );
 			button.style.display = 'none';
 
 			stylizeElement( button );
@@ -138,7 +141,7 @@ class VRButton {
 
 		} else {
 
-			const message = document.createElement( 'a' );
+			var message = document.createElement( 'a' );
 
 			if ( window.isSecureContext === false ) {
 
@@ -164,6 +167,6 @@ class VRButton {
 
 	}
 
-}
+};
 
 export { VRButton };

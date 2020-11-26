@@ -1,5 +1,10 @@
+/**
+ * @author thespite / http://clicktorelease.com/
+ */
+
 import { Cache } from './Cache.js';
 import { Loader } from './Loader.js';
+
 
 function ImageBitmapLoader( manager ) {
 
@@ -17,15 +22,13 @@ function ImageBitmapLoader( manager ) {
 
 	Loader.call( this, manager );
 
-	this.options = { premultiplyAlpha: 'none' };
+	this.options = undefined;
 
 }
 
 ImageBitmapLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	constructor: ImageBitmapLoader,
-
-	isImageBitmapLoader: true,
 
 	setOptions: function setOptions( options ) {
 
@@ -43,9 +46,9 @@ ImageBitmapLoader.prototype = Object.assign( Object.create( Loader.prototype ), 
 
 		url = this.manager.resolveURL( url );
 
-		const scope = this;
+		var scope = this;
 
-		const cached = Cache.get( url );
+		var cached = Cache.get( url );
 
 		if ( cached !== undefined ) {
 
@@ -63,16 +66,22 @@ ImageBitmapLoader.prototype = Object.assign( Object.create( Loader.prototype ), 
 
 		}
 
-		const fetchOptions = {};
-		fetchOptions.credentials = ( this.crossOrigin === 'anonymous' ) ? 'same-origin' : 'include';
-
-		fetch( url, fetchOptions ).then( function ( res ) {
+		fetch( url ).then( function ( res ) {
 
 			return res.blob();
 
 		} ).then( function ( blob ) {
 
-			return createImageBitmap( blob, scope.options );
+			if ( scope.options === undefined ) {
+
+				// Workaround for FireFox. It causes an error if you pass options.
+				return createImageBitmap( blob );
+
+			} else {
+
+				return createImageBitmap( blob, scope.options );
+
+			}
 
 		} ).then( function ( imageBitmap ) {
 

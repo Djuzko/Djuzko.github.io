@@ -1,3 +1,7 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 THREE.SVGObject = function ( node ) {
 
 	THREE.Object3D.call( this );
@@ -93,15 +97,6 @@ THREE.SVGRenderer = function () {
 
 		_clipBox.min.set( - _svgWidthHalf, - _svgHeightHalf );
 		_clipBox.max.set( _svgWidthHalf, _svgHeightHalf );
-
-	};
-
-	this.getSize = function () {
-
-		return {
-			width: _svgWidth,
-			height: _svgHeight
-		};
 
 	};
 

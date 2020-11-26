@@ -1,4 +1,6 @@
 /**
+ * @author takahiro / http://github.com/takahirox
+ *
  * Dependencies
  *  - mmd-parser https://github.com/takahirox/mmd-parser
  */
@@ -12,7 +14,7 @@ THREE.MMDExporter = function () {
 
 		if ( u2sTable === undefined ) {
 
-			var encoder = new MMDParser.CharsetEncoder(); // eslint-disable-line no-undef
+			var encoder = new MMDParser.CharsetEncoder();
 			var table = encoder.s2uTable;
 			u2sTable = {};
 

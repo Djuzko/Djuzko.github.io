@@ -1,22 +1,26 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 function WebGLAttributes( gl, capabilities ) {
 
-	const isWebGL2 = capabilities.isWebGL2;
+	var isWebGL2 = capabilities.isWebGL2;
 
-	const buffers = new WeakMap();
+	var buffers = new WeakMap();
 
 	function createBuffer( attribute, bufferType ) {
 
-		const array = attribute.array;
-		const usage = attribute.usage;
+		var array = attribute.array;
+		var usage = attribute.usage;
 
-		const buffer = gl.createBuffer();
+		var buffer = gl.createBuffer();
 
 		gl.bindBuffer( bufferType, buffer );
 		gl.bufferData( bufferType, array, usage );
 
 		attribute.onUploadCallback();
 
-		let type = gl.FLOAT;
+		var type = gl.FLOAT;
 
 		if ( array instanceof Float32Array ) {
 
@@ -28,23 +32,7 @@ function WebGLAttributes( gl, capabilities ) {
 
 		} else if ( array instanceof Uint16Array ) {
 
-			if ( attribute.isFloat16BufferAttribute ) {
-
-				if ( isWebGL2 ) {
-
-					type = gl.HALF_FLOAT;
-
-				} else {
-
-					console.warn( 'THREE.WebGLAttributes: Usage of Float16BufferAttribute requires WebGL2.' );
-
-				}
-
-			} else {
-
-				type = gl.UNSIGNED_SHORT;
-
-			}
+			type = gl.UNSIGNED_SHORT;
 
 		} else if ( array instanceof Int16Array ) {
 
@@ -79,8 +67,8 @@ function WebGLAttributes( gl, capabilities ) {
 
 	function updateBuffer( buffer, attribute, bufferType ) {
 
-		const array = attribute.array;
-		const updateRange = attribute.updateRange;
+		var array = attribute.array;
+		var updateRange = attribute.updateRange;
 
 		gl.bindBuffer( bufferType, buffer );
 
@@ -124,7 +112,7 @@ function WebGLAttributes( gl, capabilities ) {
 
 		if ( attribute.isInterleavedBufferAttribute ) attribute = attribute.data;
 
-		const data = buffers.get( attribute );
+		var data = buffers.get( attribute );
 
 		if ( data ) {
 
@@ -138,28 +126,9 @@ function WebGLAttributes( gl, capabilities ) {
 
 	function update( attribute, bufferType ) {
 
-		if ( attribute.isGLBufferAttribute ) {
-
-			const cached = buffers.get( attribute );
-
-			if ( ! cached || cached.version < attribute.version ) {
-
-				buffers.set( attribute, {
-					buffer: attribute.buffer,
-					type: attribute.type,
-					bytesPerElement: attribute.elementSize,
-					version: attribute.version
-				} );
-
-			}
-
-			return;
-
-		}
-
 		if ( attribute.isInterleavedBufferAttribute ) attribute = attribute.data;
 
-		const data = buffers.get( attribute );
+		var data = buffers.get( attribute );
 
 		if ( data === undefined ) {
 

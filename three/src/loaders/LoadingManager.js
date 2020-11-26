@@ -1,12 +1,16 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
 function LoadingManager( onLoad, onProgress, onError ) {
 
-	const scope = this;
+	var scope = this;
 
-	let isLoading = false;
-	let itemsLoaded = 0;
-	let itemsTotal = 0;
-	let urlModifier = undefined;
-	const handlers = [];
+	var isLoading = false;
+	var itemsLoaded = 0;
+	var itemsTotal = 0;
+	var urlModifier = undefined;
+	var handlers = [];
 
 	// Refer to #5689 for the reason why we don't set .onStart
 	// in the constructor
@@ -98,7 +102,7 @@ function LoadingManager( onLoad, onProgress, onError ) {
 
 	this.removeHandler = function ( regex ) {
 
-		const index = handlers.indexOf( regex );
+		var index = handlers.indexOf( regex );
 
 		if ( index !== - 1 ) {
 
@@ -112,10 +116,10 @@ function LoadingManager( onLoad, onProgress, onError ) {
 
 	this.getHandler = function ( file ) {
 
-		for ( let i = 0, l = handlers.length; i < l; i += 2 ) {
+		for ( var i = 0, l = handlers.length; i < l; i += 2 ) {
 
-			const regex = handlers[ i ];
-			const loader = handlers[ i + 1 ];
+			var regex = handlers[ i ];
+			var loader = handlers[ i + 1 ];
 
 			if ( regex.global ) regex.lastIndex = 0; // see #17920
 
@@ -133,7 +137,7 @@ function LoadingManager( onLoad, onProgress, onError ) {
 
 }
 
-const DefaultLoadingManager = new LoadingManager();
+var DefaultLoadingManager = new LoadingManager();
 
 
 export { DefaultLoadingManager, LoadingManager };

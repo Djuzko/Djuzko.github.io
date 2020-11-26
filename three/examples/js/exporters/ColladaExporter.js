@@ -1,4 +1,5 @@
 /**
+ * @author Garrett Johnson / http://gkjohnson.github.io/
  * https://github.com/gkjohnson/collada-exporter-js
  *
  * Usage:
@@ -99,8 +100,8 @@ THREE.ColladaExporter.prototype = {
 			canvas = canvas || document.createElement( 'canvas' );
 			ctx = ctx || canvas.getContext( '2d' );
 
-			canvas.width = image.width;
-			canvas.height = image.height;
+			canvas.width = image.naturalWidth;
+			canvas.height = image.naturalHeight;
 
 			ctx.drawImage( image, 0, 0 );
 

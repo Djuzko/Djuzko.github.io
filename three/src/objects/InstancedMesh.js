@@ -1,20 +1,22 @@
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 import { BufferAttribute } from '../core/BufferAttribute.js';
 import { Mesh } from './Mesh.js';
 import { Matrix4 } from '../math/Matrix4.js';
 
-const _instanceLocalMatrix = new Matrix4();
-const _instanceWorldMatrix = new Matrix4();
+var _instanceLocalMatrix = new Matrix4();
+var _instanceWorldMatrix = new Matrix4();
 
-const _instanceIntersects = [];
+var _instanceIntersects = [];
 
-const _mesh = new Mesh();
+var _mesh = new Mesh();
 
 function InstancedMesh( geometry, material, count ) {
 
 	Mesh.call( this, geometry, material );
 
 	this.instanceMatrix = new BufferAttribute( new Float32Array( count * 16 ), 16 );
-	this.instanceColor = null;
 
 	this.count = count;
 
@@ -28,23 +30,6 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 	isInstancedMesh: true,
 
-	copy: function ( source ) {
-
-		Mesh.prototype.copy.call( this, source );
-
-		this.instanceMatrix.copy( source.instanceMatrix );
-		this.count = source.count;
-
-		return this;
-
-	},
-
-	getColorAt: function ( index, color ) {
-
-		color.fromArray( this.instanceColor.array, index * 3 );
-
-	},
-
 	getMatrixAt: function ( index, matrix ) {
 
 		matrix.fromArray( this.instanceMatrix.array, index * 16 );
@@ -53,15 +38,15 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 	raycast: function ( raycaster, intersects ) {
 
-		const matrixWorld = this.matrixWorld;
-		const raycastTimes = this.count;
+		var matrixWorld = this.matrixWorld;
+		var raycastTimes = this.count;
 
 		_mesh.geometry = this.geometry;
 		_mesh.material = this.material;
 
 		if ( _mesh.material === undefined ) return;
 
-		for ( let instanceId = 0; instanceId < raycastTimes; instanceId ++ ) {
+		for ( var instanceId = 0; instanceId < raycastTimes; instanceId ++ ) {
 
 			// calculate the world matrix for each instance
 
@@ -77,9 +62,9 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 			// process the result of raycast
 
-			for ( let i = 0, l = _instanceIntersects.length; i < l; i ++ ) {
+			for ( var i = 0, l = _instanceIntersects.length; i < l; i ++ ) {
 
-				const intersect = _instanceIntersects[ i ];
+				var intersect = _instanceIntersects[ i ];
 				intersect.instanceId = instanceId;
 				intersect.object = this;
 				intersects.push( intersect );
@@ -89,18 +74,6 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 			_instanceIntersects.length = 0;
 
 		}
-
-	},
-
-	setColorAt: function ( index, color ) {
-
-		if ( this.instanceColor === null ) {
-
-			this.instanceColor = new BufferAttribute( new Float32Array( this.count * 3 ), 3 );
-
-		}
-
-		color.toArray( this.instanceColor.array, index * 3 );
 
 	},
 

@@ -1,3 +1,14 @@
+/**
+ * GCodeLoader is used to load gcode files usually used for 3D printing or CNC applications.
+ *
+ * Gcode files are composed by commands used by machines to create objects.
+ *
+ * @class GCodeLoader
+ * @param {Manager} manager Loading manager.
+ * @author tentone
+ * @author joewalnes
+ */
+
 import {
 	BufferGeometry,
 	Euler,
@@ -8,15 +19,6 @@ import {
 	LineSegments,
 	Loader
 } from "../../../build/three.module.js";
-
-/**
- * GCodeLoader is used to load gcode files usually used for 3D printing or CNC applications.
- *
- * Gcode files are composed by commands used by machines to create objects.
- *
- * @class GCodeLoader
- * @param {Manager} manager Loading manager.
- */
 
 var GCodeLoader = function ( manager ) {
 
@@ -36,29 +38,9 @@ GCodeLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		var loader = new FileLoader( scope.manager );
 		loader.setPath( scope.path );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( text ) {
 
-			try {
-
-				onLoad( scope.parse( text ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( text ) );
 
 		}, onProgress, onError );
 
@@ -232,20 +214,9 @@ GCodeLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			for ( var i = 0; i < layers.length; i ++ ) {
 
 				var layer = layers[ i ];
-				var layerVertex = layer.vertex;
-				var layerPathVertex = layer.pathVertex;
 
-				for ( var j = 0; j < layerVertex.length; j ++ ) {
-
-					vertex.push( layerVertex[ j ] );
-
-				}
-
-				for ( var j = 0; j < layerPathVertex.length; j ++ ) {
-
-					pathVertex.push( layerPathVertex[ j ] );
-
-				}
+				vertex = vertex.concat( layer.vertex );
+				pathVertex = pathVertex.concat( layer.pathVertex );
 
 			}
 

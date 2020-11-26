@@ -1,5 +1,7 @@
 /**
  * Loads a Wavefront .mtl file specifying materials
+ *
+ * @author angelxuanchang
  */
 
 THREE.MTLLoader = function ( manager ) {
@@ -33,29 +35,9 @@ THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 
 		var loader = new THREE.FileLoader( this.manager );
 		loader.setPath( this.path );
-		loader.setRequestHeader( this.requestHeader );
-		loader.setWithCredentials( this.withCredentials );
 		loader.load( url, function ( text ) {
 
-			try {
-
-				onLoad( scope.parse( text, path ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( text, path ) );
 
 		}, onProgress, onError );
 

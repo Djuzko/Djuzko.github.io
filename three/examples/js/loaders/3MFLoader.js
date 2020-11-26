@@ -1,4 +1,6 @@
 /**
+ * @author technohippy / https://github.com/technohippy
+ * @author Mugen87 / https://github.com/Mugen87
  *
  * 3D Manufacturing Format (3MF) specification: https://3mf.io/specification/
  *
@@ -34,29 +36,9 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 		var loader = new THREE.FileLoader( scope.manager );
 		loader.setPath( scope.path );
 		loader.setResponseType( 'arraybuffer' );
-		loader.setRequestHeader( scope.requestHeader );
-		loader.setWithCredentials( scope.withCredentials );
 		loader.load( url, function ( buffer ) {
 
-			try {
-
-				onLoad( scope.parse( buffer ) );
-
-			} catch ( e ) {
-
-				if ( onError ) {
-
-					onError( e );
-
-				} else {
-
-					console.error( e );
-
-				}
-
-				scope.manager.itemError( url );
-
-			}
+			onLoad( scope.parse( buffer ) );
 
 		}, onProgress, onError );
 
@@ -88,7 +70,7 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 			try {
 
-				zip = new JSZip( data ); // eslint-disable-line no-undef
+				zip = new JSZip( data );
 
 			} catch ( e ) {
 
@@ -983,7 +965,7 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 		}
 
-		function buildVertexColorMesh( colorgroup, triangleProperties, modelData, meshData, objectData ) {
+		function buildVertexColorMesh( colorgroup, triangleProperties, modelData, meshData ) {
 
 			// geometry
 
@@ -1017,21 +999,21 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 				//
 
-				var p1 = ( triangleProperty.p1 !== undefined ) ? triangleProperty.p1 : objectData.pindex;
-				var p2 = ( triangleProperty.p2 !== undefined ) ? triangleProperty.p2 : p1;
-				var p3 = ( triangleProperty.p3 !== undefined ) ? triangleProperty.p3 : p1;
+				var p1 = triangleProperty.p1;
+				var p2 = triangleProperty.p2;
+				var p3 = triangleProperty.p3;
 
 				colorData.push( colors[ ( p1 * 3 ) + 0 ] );
 				colorData.push( colors[ ( p1 * 3 ) + 1 ] );
 				colorData.push( colors[ ( p1 * 3 ) + 2 ] );
 
-				colorData.push( colors[ ( p2 * 3 ) + 0 ] );
-				colorData.push( colors[ ( p2 * 3 ) + 1 ] );
-				colorData.push( colors[ ( p2 * 3 ) + 2 ] );
+				colorData.push( colors[ ( ( p2 || p1 ) * 3 ) + 0 ] );
+				colorData.push( colors[ ( ( p2 || p1 ) * 3 ) + 1 ] );
+				colorData.push( colors[ ( ( p2 || p1 ) * 3 ) + 2 ] );
 
-				colorData.push( colors[ ( p3 * 3 ) + 0 ] );
-				colorData.push( colors[ ( p3 * 3 ) + 1 ] );
-				colorData.push( colors[ ( p3 * 3 ) + 2 ] );
+				colorData.push( colors[ ( ( p3 || p1 ) * 3 ) + 0 ] );
+				colorData.push( colors[ ( ( p3 || p1 ) * 3 ) + 1 ] );
+				colorData.push( colors[ ( ( p3 || p1 ) * 3 ) + 2 ] );
 
 			}
 
@@ -1096,7 +1078,7 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 					case 'vertexColors':
 						var colorgroup = modelData.resources.colorgroup[ resourceId ];
-						meshes.push( buildVertexColorMesh( colorgroup, triangleProperties, modelData, meshData, objectData ) );
+						meshes.push( buildVertexColorMesh( colorgroup, triangleProperties, modelData, meshData ) );
 						break;
 
 					case 'default':
@@ -1387,24 +1369,11 @@ THREE.ThreeMFLoader.prototype = Object.assign( Object.create( THREE.Loader.proto
 
 		}
 
-		function fetch3DModelPart( rels ) {
-
-			for ( var i = 0; i < rels.length; i ++ ) {
-
-				var rel = rels[ i ];
-				var extension = rel.target.split( '.' ).pop();
-
-				if ( extension.toLowerCase() === 'model' ) return rel;
-
-			}
-
-		}
-
 		function build( objects, data3mf ) {
 
 			var group = new THREE.Group();
 
-			var relationship = fetch3DModelPart( data3mf[ 'rels' ] );
+			var relationship = data3mf[ 'rels' ][ 0 ];
 			var buildData = data3mf.model[ relationship[ 'target' ].substring( 1 ) ][ 'build' ];
 
 			for ( var i = 0; i < buildData.length; i ++ ) {
