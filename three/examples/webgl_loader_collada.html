@@ -81,14 +81,6 @@
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
-				function expo(){
-
-				const exporter = new ColladaExporter();
-
-				const data = exporter.parse(scene, null);
-				downloadFile(data);
-				
-				}
 
 				
 				const exportButton = document.getElementById( 'export' );
@@ -96,10 +88,14 @@
 				
 			}	
 
+			function expo(){
+
 				const exporter = new ColladaExporter();
 
 				const data = exporter.parse(scene, null);
 				downloadFile(data);
+				
+			}
 
 			function onWindowResize() {
 
