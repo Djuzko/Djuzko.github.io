@@ -80,6 +80,9 @@
 
 			}
 
+				const exportButton = document.getElementById( 'export' );
+				exportButton.addEventListener( 'click', collada );
+
 			function onWindowResize() {
 
 				camera.aspect = window.innerWidth / window.innerHeight;
