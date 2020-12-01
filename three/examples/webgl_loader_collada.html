@@ -83,7 +83,7 @@
 
 				const exporter = new ColladaExporter();
 
-				const data = exporter.collada(scene, null);
+				const data = exporter.parse(scene, null);
 				downloadFile(data);
 
 				/*
