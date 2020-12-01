@@ -81,16 +81,17 @@
 
 				
 
-				const exporter = new ColladaExporter();
-
-				const data = exporter.parse(scene, null);
-				downloadFile(data);
 
 				/*
 				const exportButton = document.getElementById( 'export' );
 				exportButton.addEventListener( 'click', exporter );
 				*/
 			}	
+
+				const exporter = new ColladaExporter();
+
+				const data = exporter.parse(scene, null);
+				downloadFile(data);
 
 			function onWindowResize() {
 
