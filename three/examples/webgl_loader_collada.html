@@ -17,6 +17,7 @@
 			import Stats from './jsm/libs/stats.module.js';
 
 			import { ColladaLoader } from './jsm/loaders/ColladaLoader.js';
+			import { ColladaExporter } from './jsm/exporters/ColladaExporter.js';
 
 			var container, stats, clock;
 			var camera, scene, renderer, elf;
@@ -81,7 +82,7 @@
 			}
 
 				const exportButton = document.getElementById( 'export' );
-				exportButton.addEventListener( 'click', collada );
+				exportButton.addEventListener( 'click', exportCollada );
 
 			function onWindowResize() {
 
