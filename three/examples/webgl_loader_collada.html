@@ -10,6 +10,8 @@
 
 		<div id="container"></div>
 
+		<button id="export"> Export </button>
+
 		<script type="module">
 
 			import * as THREE from '../build/three.module.js';
@@ -79,13 +81,19 @@
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
+				function expo(){
+
+				const exporter = new ColladaExporter();
+
+				const data = exporter.parse(scene, null);
+				downloadFile(data);
 				
+				}
 
-
-				/*
+				
 				const exportButton = document.getElementById( 'export' );
-				exportButton.addEventListener( 'click', exporter );
-				*/
+				exportButton.addEventListener( 'click', expo );
+				
 			}	
 
 				const exporter = new ColladaExporter();
