@@ -79,11 +79,18 @@
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
-			
+				
 
+				const exporter = new ColladaExporter();
+
+				const data = exporter.elf(scene, null);
+				downloadFile(data);
+
+				/*
 				const exportButton = document.getElementById( 'export' );
-				exportButton.addEventListener( 'click', сollada );
-			}
+				exportButton.addEventListener( 'click', exporter );
+				*/
+			}	
 
 			function onWindowResize() {
 
