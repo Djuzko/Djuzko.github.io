@@ -14,7 +14,7 @@
 	<body>
 		<a href="models/collada/elf/elfs.dae" download id="download">СКАЧАТЬ</a>
 
-		<button onclick="init()">Click</button>
+		<button id = "set">Click</button>
 
 		<div id="container"></div>
 
@@ -32,6 +32,8 @@
 
 			init();
 			animate();
+
+			set.addEventListener("click", init);
 
 			function init() {
 
