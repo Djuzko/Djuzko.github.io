@@ -14,6 +14,9 @@
 	<body>
 		<a href="models/collada/elf/elfs.dae" download id="download">СКАЧАТЬ</a>
 
+		<input type="number" id="x" value = "80">
+		<input type="number" id="y" value = "170">
+		<input type="number" id="z" value = "30">
 		<button id = "set">Click</button>
 
 		<div id="container"></div>
@@ -33,14 +36,21 @@
 			init();
 			animate();
 
-			set.addEventListener("click", init);
+			set.addEventListener("click", function(){
+				var div = document.getElementById("container");
+				for (var i = div.children.length - 1; i >= 0; i--) {
+					div.children[i].remove();
+				}
+				init();
+				animate();
+			});
 
 			function init() {
 
 				container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
-				camera.position.set(80, 170, 30);
+				camera.position.set(x.value, y.value, z.value);
 				camera.lookAt( 0, 3, 0 );
 
 				scene = new THREE.Scene();
